@@ -1,0 +1,46 @@
+const Resource = {
+  BUILDING_MATERIAL: 'BUILDING_MATERIAL',
+  COIN: 'COIN',
+  LABOR: 'LABOR',
+  WATER: 'WATER'
+};
+
+const ProjectType = {
+  INFRASTRUCTURE: 'INFRASTRUCTURE',
+  AQUATIC: 'AQUATIC',
+  COMMERCIAL: 'COMMERCIAL',
+  CIVIC: 'CIVIC',
+  DEFAULT: 'DEFAULT',
+  CULTURAL: 'CULTURAL'
+};
+
+const Shape = {
+	SINGLE: 'SINGLE',
+	LINE_2: 'LINE_2',
+	LINE_3: 'LINE_3',
+	TRIANGLE_3: 'TRIANGLE_3',
+	V3: 'V3',
+	DIAMOND: 'DIAMOND',
+	CANE: 'CANE',
+	V5: 'V5',
+	U: 'U',
+	LINE_6: 'LINE_6',
+	STAR: 'STAR',
+	TRIANGLE_6: 'TRIANGLE_6'
+};
+
+const Building = {
+  BRIDGE: 'BRIDGE',
+  HARBOR: 'HARBOR',
+  BOULEVARD: 'BOULEVARD',
+  PLACE_DE_CHARLES_GAULLE: 'PLACE_DE_CHARLES_GAULLE',
+  TENEMENT: 'TENEMENT',
+  TAXHOUSE: 'TAXHOUSE'
+};
+
+export {
+  Resource,
+  ProjectType,
+  Shape,
+  Building
+};

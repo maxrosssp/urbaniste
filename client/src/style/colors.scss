@@ -1,0 +1,55 @@
+$building-material: #E86F51;
+$coin: #F4EB61;
+$labor: #7AD15E;
+$water: #2A989E;
+$any: lightgrey;
+
+$first-player-infrastructure: #e0ffe8;
+$first-player-aquatic: #d6ecff;
+$first-player-commercial: #fffed6;
+$first-player-civic: #ffe9e8;
+$first-player-default: #c9c9c9;
+$first-player-cultural: #e4bdfc;
+
+$second-player-infrastructure: #014a01;
+$second-player-aquatic: #001645;
+$second-player-commercial: #573e00;
+$second-player-civic: #3b0000;
+$second-player-default: #525252;
+$second-player-cultural: #4f057d;
+
+$can-build-project: yellow;
+$selected-project: red;
+
+$valid-build-position: lime;
+$invalid-build-position: red;
+
+$table-header-text: white;
+$table-header-background: #313131;
+
+$resource-colors: (
+  "building-material": $building-material,
+  "coin": $coin,
+  "labor": $labor,
+  "water": $water,
+  "any": $any
+);
+
+$first-player-project-colors: (
+  "infrastructure": $first-player-infrastructure,
+  "aquatic": $first-player-aquatic,
+  "commercial": $first-player-commercial,
+  "civic": $first-player-civic,
+  "default": $first-player-default,
+  "cultural": $first-player-cultural 
+);
+
+$second-player-project-colors: (
+  "infrastructure": $second-player-infrastructure,
+  "aquatic": $second-player-aquatic,
+  "commercial": $second-player-commercial,
+  "civic": $second-player-civic,
+  "default": $second-player-default,
+  "cultural": $second-player-cultural 
+);
+

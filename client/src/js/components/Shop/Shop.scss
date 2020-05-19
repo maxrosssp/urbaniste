@@ -1,0 +1,41 @@
+@import '../../../style/colors.scss';
+@import '../../../style/mixins.scss';
+
+table.shop.table {
+  @include resource-colors(background-color, $prefix: 'td') {
+    color: black;
+  }
+
+  td.can-build {
+    background-color: $can-build-project;
+    color: black;
+  }
+
+  td.selected {
+    background-color: $selected-project;
+    color: black;
+  }
+}
+
+table.shop.table-striped tbody {
+  tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.71);
+    color: #e0e0e0;
+  }
+  tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.74);
+    color: #e0e0e0;
+  }
+}
+
+.first {
+  @include project-colors(background-color, $first: true, $prefix: 'td') {
+    color: black;
+  }
+}
+
+.second {  
+  @include project-colors(background-color, $first: false, $prefix: 'td') {
+    color: #e0e0e0;
+  }
+}

@@ -1,0 +1,60 @@
+@import '../../../../style/colors.scss';
+@import '../../../../style/mixins.scss';
+
+.board.valid svg g.in-shape polygon {
+  stroke: $valid-build-position;
+  stroke-width: 0.6px;
+}
+
+.board.invalid svg g.in-shape polygon {
+  stroke: $invalid-build-position;
+  stroke-width: 0.6px;
+}
+
+.first svg g {
+  @include project-colors(fill, $first: true, $prefix: '.building.mine');
+
+  @include project-colors(fill, $first: false, $prefix: '.building.enemy') {
+    text {
+      fill: #e0e0e0;
+    }
+  }
+}
+
+.second svg g {
+  @include project-colors(fill, $first: false, $prefix: '.building.mine') {
+    text {
+      fill: #e0e0e0;
+    }
+  }
+
+  @include project-colors(fill, $first: true, $prefix: '.building.enemy');
+}
+
+
+svg {
+  g {
+    .hexagon:hover,
+    .hexagon:hover text,
+    .in-shape > g.hexagon,
+    .in-shape > g.hexagon text {
+      fill-opacity: 0.6;
+    }
+    
+    text {
+      font-size: 3px;
+      fill: black;
+    }
+
+    @include resource-colors(fill);
+  }
+  
+  path {
+    fill: none;
+    stroke: hsl(60, 20%, 70%);
+    stroke-width: 0.4em;
+    stroke-opacity: 0.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  } 
+}

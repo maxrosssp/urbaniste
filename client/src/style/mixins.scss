@@ -1,0 +1,28 @@
+@import './colors.scss';
+
+@mixin property-colors($property, $colors, $prefix: '') {
+  @each $name, $color in $colors {
+    #{$prefix}.#{$name} {
+      #{$property}: $color;
+      @content;
+    }
+  }
+}
+
+@mixin project-colors($property, $first: true, $prefix: '') {
+  @if $first {
+    @include property-colors($property, $first-player-project-colors, $prefix) {
+      @content;
+    }
+  } @else {
+    @include property-colors($property, $second-player-project-colors, $prefix) {
+      @content;
+    }
+  }
+}
+
+@mixin resource-colors($property, $prefix: '') {
+  @include property-colors($property, $resource-colors, $prefix) {
+    @content;
+  }
+}

@@ -1,0 +1,30 @@
+@import '../../../../style/mixins.scss';
+
+// table.player.table {
+//   @include resource-colors(background-color, $prefix: 'tr');
+// }
+
+table.player.table-striped tbody {
+  tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.71);
+  }
+  tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.74);
+  }
+}
+
+table.player.table {
+  @include resource-colors(color, $prefix: 'tr');
+}
+
+table.player.table.mine {
+  border-style: solid;
+  border-width: 4px;
+  border-color: #4d4dff;
+}
+
+table.player.table.enemy {
+  border-style: solid;
+  border-width: 4px;
+  border-color: white;
+}

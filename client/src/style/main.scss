@@ -1,0 +1,25 @@
+@import './colors.scss';
+
+table.table {
+  thead {
+    color: $table-header-text;
+    background-color: $table-header-background;
+  }
+
+  td,
+  th {
+      padding: 4px 8px;
+  }
+}
+
+.urbaniste .col {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.urbaniste .message-prompt {
+  text-align: center;
+  border-style: solid;
+  padding: 4px;
+  margin-bottom: 17px;
+}

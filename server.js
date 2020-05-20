@@ -12,7 +12,7 @@ const certificate = {
   ]
 };
 
-const PORT = process.env.HTTPS_PORT || 443;
+const PORT = process.env.HTTPS_PORT || 4001;
 const WS_PORT = process.env.WS_PORT || 8000;
 
 const app = express();

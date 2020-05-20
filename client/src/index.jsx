@@ -10,8 +10,8 @@ const importedGames = [
 
 ReactDOM.render((
   <Lobby
-    gameServer={`http://${window.location.hostname}:8000`}
-    lobbyServer={`http://${window.location.hostname}:8000`}
+    gameServer={`https://${window.location.hostname}:8000`}
+    lobbyServer={`https://${window.location.hostname}:8000`}
     gameComponents={importedGames}
   />
 ), document.getElementById('app'));

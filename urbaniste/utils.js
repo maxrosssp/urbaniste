@@ -42,7 +42,7 @@ export function getAllAdjacentBuildings(state, positions) {
   }
   const adjacentPositions = getAllAdjacentTiles(state, positions).map(tile => tile.position);
   return state.buildings.filter(building => building.positions.some(position => adjacentPositions.some(adjacentPosition => positionsAreEqual(adjacentPosition, position))));
-}
+};
 
 export const getPlayerBuildingsOfType = (state, playerId, type) => state.buildings.filter(building => building.owner === playerId && building.name === type);
 
@@ -123,3 +123,11 @@ export const getResourceSelectionValues = (validSelections, resources, selection
     }
   };
 };
+
+export const getResourcesAtPositions = (state, positions) => {
+  const resources = getFullSelection(getTiles(state, positions).reduce((resources, tile) => ({ ...resources, [tile.resource]: (resources[tile.resource] || 0) + 1 }), {}));
+  console.log(resources);
+  return resources;
+};
+
+// export const getResourcesAtPositions = (state, positions) => getFullSelection(getTiles(state, positions).reduce((resources, tile) => ({ ...resources, [tile.resource]: (resources[tile.resource] || 0) + 1 }), {}));;

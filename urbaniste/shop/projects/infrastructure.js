@@ -27,7 +27,7 @@ export default {
         ((positions.length - claims.friendly.length) === claims.unclaimed.length) &&
         (claims.enemy.length === 0);
     },
-    victoryPoints: 1
+    victoryPoints: 2
   },
   [Building.FOUNDRY]: {
     shape: Shape.LINE_2,
@@ -38,6 +38,7 @@ export default {
     ),
     victoryPoints: 1
   },
+  //NEEDS STAGE
   [Building.PRISON]: {
     shape: Shape.LINE_2,
     cost: { [Resource.COIN]: 2, [Resource.LABOR]: 2 },
@@ -45,8 +46,9 @@ export default {
     validator: (state, playerId, positions) => (
       validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })
     ),
-    victoryPoints: 1
+    victoryPoints: 2
   },
+  //NEEDS STAGE
   [Building.TRAMWAY]: {
     shape: Shape.LINE_3,
     cost: { [Resource.BUILDING_MATERIAL]: 3 },
@@ -54,8 +56,9 @@ export default {
     validator: (state, playerId, positions) => (
       validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
     ),
-    victoryPoints: 1
+    victoryPoints: 2
   },
+  //NEEDS STAGE
   [Building.TUNNEL]: {
     shape: Shape.SINGLE,
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 3 },
@@ -64,6 +67,6 @@ export default {
       validateClaims(state, positions, playerId, { friendly: 1, enemy: 0, unclaimed: 0 }) &&
       getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length === 1
     ),
-    victoryPoints: 1
+    victoryPoints: 3
   }
 };

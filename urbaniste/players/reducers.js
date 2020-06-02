@@ -1,9 +1,12 @@
+import { Resource } from '../constants';
 import initialize from './initialize';
 import {
   INITIALIZE_GAME,
   ADD_PLAYER_RESOURCE,
   ADD_PLAYER_RESOURCES,
   REMOVE_PLAYER_RESOURCES,
+  SET_TILE_OWNER,
+  REMOVE_TILE_OWNER,
   TAKE_TILE,
   UNDO_TAKE_TILE,
   SELECT_PROJECT,
@@ -19,14 +22,28 @@ function resources(state = {}, action) {
         [action.resource]: state[action.resource] + (action.count || 1)
       };
     case ADD_PLAYER_RESOURCES:
-      return {
+      console.log(action);
+      const resources = {
         ...state,
-        ...Object.keys(action.resources)
-          .reduce((updatedResources, resource) => ({
-            ...updatedResources,
-            [resource]: state[resource] + action.resources[resource]
-          }), {})
+        [Resource.BUILDING_MATERIAL]: state[Resource.BUILDING_MATERIAL] + (action.resources[Resource.BUILDING_MATERIAL] || 0),
+        [Resource.COIN]: state[Resource.COIN] + (action.resources[Resource.COIN] || 0),
+        [Resource.LABOR]: state[Resource.LABOR] + (action.resources[Resource.LABOR] || 0)
       };
+      console.log(resources);
+      return resources;
+      // return {
+      //   [Resource.BUILDING_MATERIAL]: state[Resource.BUILDING_MATERIAL] + (action.resources[Resource.BUILDING_MATERIAL] || 0),
+      //   [Resource.COIN]: state[Resource.COIN] + (action.resources[Resource.COIN] || 0),
+      //   [Resource.LABOR]: state[Resource.LABOR] + (action.resources[Resource.LABOR] || 0)
+      // };
+      // return {
+      //   ...state,
+      //   ...Object.keys(action.resources)
+      //     .reduce((updatedResources, resource) => ({
+      //       ...updatedResources,
+      //       [resource]: state[resource] + (action.resources[resource] || 0)
+      //     }), {})
+      // };
     case UNDO_TAKE_TILE:
       return {
         ...state,
@@ -39,7 +56,7 @@ function resources(state = {}, action) {
         ...Object.keys(action.resources)
           .reduce((updatedResources, resource) => ({
             ...updatedResources,
-            [resource]: state[resource] - action.resources[resource]
+            [resource]: (state[resource] || 0) - (action.resources[resource] || 0)
           }), {})
       };
     default:
@@ -61,6 +78,10 @@ function selectedProject(state = undefined, action) {
 
 function taken(state = [], action) {
   switch (action.type) {
+    case REMOVE_TILE_OWNER:
+      return state.filter(tile => !(tile.position.row === action.row && tile.position.col === action.col));
+    case SET_TILE_OWNER:
+      return [{ position: { row: action.row, col: action.col } }].concat(state);
     case TAKE_TILE:
       return [{ position: { row: action.row, col: action.col }, resource: action.resource }].concat(state);
     case UNDO_TAKE_TILE:

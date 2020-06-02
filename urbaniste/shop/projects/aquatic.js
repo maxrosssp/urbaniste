@@ -4,8 +4,7 @@ import {
   Building
 } from '../../constants.js';
 import {
-  getTiles,
-  getTilesAdjacentToAll
+  getAllAdjacentTiles
 } from '../../utils';
 import {
   getSortedTiles,
@@ -13,9 +12,6 @@ import {
   validateResourceTypes,
   validateFriendlyAdjacent
 } from '../validation';
-import {
-  validateNoAdjacentBuildingType
-} from '../../buildings/validation';
 
 export default {
   [Building.BRIDGE]: {
@@ -26,7 +22,7 @@ export default {
       getSortedTiles(state, positions)[1].resource === Resource.WATER &&
       validateClaims(state, positions, playerId, { friendly: 1 })
     ),
-    victoryPoints: 1
+    victoryPoints: 3
   },
   [Building.HARBOR]: {
     shape: Shape.SINGLE,
@@ -36,7 +32,7 @@ export default {
       validateResourceTypes(state, positions, { [Resource.WATER]: 1 }) &&
       validateFriendlyAdjacent(state, positions, playerId)
     ),
-    victoryPoints: 1
+    victoryPoints: 2
   },
   [Building.CANAL]: {
     shape: Shape.CANE,
@@ -46,27 +42,27 @@ export default {
       validateResourceTypes(state, positions, {[Resource.WATER]: 2 }) &&
       validateClaims(state, positions, playerId, { friendly: 2, unclaimed: 2 })
     ),
-    victoryPoints: 1
+    victoryPoints: 2
   },
   [Building.FERRY]: {
     shape: Shape.SINGLE,
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 3, [Resource.LABOR]: 1 },
     available: 5,
     validator: (state, playerId, positions) => (
-      getTilesAdjacentToAll(state, positions).some(tile => tile.resource === Resource.WATER) &&
+      getAllAdjacentTiles(state, positions).some(tile => tile.resource === Resource.WATER) &&
       validateClaims(state, positions, playerId, { friendly: 1 })
     ),
-    victoryPoints: 1
+    victoryPoints: 3
   },
   [Building.LIGHTHOUSE]: {
     shape: Shape.SINGLE,
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 3, [Resource.LABOR]: 1 },
     available: 5,
     validator: (state, playerId, positions) => (
-      getTilesAdjacentToAll(state, getTiles(state, positions).concat(getTilesAdjacentToAll(state, positions))).some(tile => tile.resource === Resource.WATER) &&
+      getAllAdjacentTiles(state, positions).some(tile => tile.resource === Resource.WATER) &&
       validateClaims(state, positions, playerId, { friendly: 1 })
     ),
-    victoryPoints: 1
+    victoryPoints: 2
   },
   [Building.LOCK]: {
     shape: Shape.DIAMOND,
@@ -75,17 +71,6 @@ export default {
     validator: (state, playerId, positions) => (
       validateClaims(state, positions, playerId, { friendly: 4 })
     ),
-    victoryPoints: 1
-  },
-  [Building.MARINA]: {
-    shape: Shape.V3,
-    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 3 },
-    available: 5,
-    validator: (state, playerId, positions) => (
-      validateClaims(state, positions, playerId, { friendly: 3 }) &&
-      validateNoAdjacentBuildingType(state, positions, Building.MARINA) &&
-      getTilesAdjacentToAll(state, positions)[0].resource === Resource.WATER
-    ),
-    victoryPoints: 1
+    victoryPoints: 2
   }
 };

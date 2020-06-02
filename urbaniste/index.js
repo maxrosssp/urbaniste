@@ -1,7 +1,7 @@
 import moves from './moves';
 import { Building } from './constants';
 import { getSelectedProject } from './shop/selectors';
-import { canTakeTileAtPosition } from './tiles/validation';
+import { canTakeTileAtPosition, canReplaceTileAtPosition } from './tiles/validation';
 
 const getPlayerConfigs = (playerCount) => [...Array(playerCount).keys()].map(id => ({ id: id + '', name: 'Player ' + (id + 1) }));
 
@@ -36,6 +36,9 @@ const BuildProject = (G, ctx, tiles, resources) => {
     case Building.LOAN_OFFICE:
       ctx.events.setActivePlayers({ currentPlayer: 'loan', moveLimit: 1 });
       break;
+    case Building.MONUMENT:
+      ctx.events.setActivePlayers({ currentPlayer: 'replace', moveLimit: 1 });
+      break;
     default:
       ctx.events.endTurn();
   }
@@ -45,9 +48,9 @@ const EndTurn = {
   move: (_, ctx) => ctx.events.endTurn(),
   noLimit: true
 };
-const StealResources = (G, ctx, fromPlayer, resources) => {
+const StealResources = (G, ctx, resources) => {
   ctx.events.endTurn();
-  return moves.steal(G, ctx.currentPlayer, fromPlayer, resources);
+  return moves.steal(G, ctx.currentPlayer, resources);
 };
 const Ferry = (G, ctx, position, ferryOptions) => {
   if (canTakeTileAtPosition(G, ctx.currentPlayer, position, ferryOptions)) {
@@ -59,6 +62,13 @@ const Ferry = (G, ctx, position, ferryOptions) => {
 const RecieveLoan = (G, ctx, resourceType) => {
   ctx.events.endTurn();
   return moves.addResources(G, ctx.currentPlayer, { [resourceType]: 3 });
+};
+const ReplaceTile = (G, ctx, position, tileOptions) => {
+  if (canReplaceTileAtPosition(G, ctx.currentPlayer, position, tileOptions)) {
+    ctx.events.endTurn();
+    return moves.replaceTile(G, ctx.currentPlayer, position);
+  }
+  return G;
 };
 
 export const Urbaniste = {
@@ -96,6 +106,12 @@ export const Urbaniste = {
       loan: {
         moves: {
           RecieveLoan
+        }
+      },
+      replace: {
+        moves: {
+          ReplaceTile,
+          EndTurn
         }
       }
     }

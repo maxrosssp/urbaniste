@@ -22,7 +22,12 @@ function Player({
     >
       <thead>
         <tr>
-          <th className="text-center table-header" colSpan="2">{playerId === player.id ? 'My Resources' : 'Enemy Resources'}</th>
+          <th className="text-center table-header">
+            {playerId === player.id ? 'My Resources' : 'Enemy Resources'}
+          </th>
+          <th>
+            {`VP: ${player.victoryPoints}`}
+          </th>
         </tr>
       </thead>
       <tbody>

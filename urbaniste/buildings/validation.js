@@ -56,3 +56,25 @@ const getAllRotationsForShape = (shape) => {
 export const getAllPositionsForShapeContainingPosition = (position, shape) => {
   return getAllRotationsForShape(shape).map(rotation => normalize(position, rotation));
 };
+
+const buildingsAreEqual = (buildingA, buildingB) => (
+  buildingA.name === buildingB.name && 
+  buildingA.owner === buildingB.owner && 
+  shapesAreEqual(buildingA.positions, buildingB.positions)
+);
+
+const getAdjacentFriendlyBuildings = (state, playerId, positions) => getAllAdjacentBuildings(state, positions).filter(building => building.owner === playerId);
+
+const isBuildingInList = (building, buildingList) => buildingList.some(buildingFromList => buildingsAreEqual(building, buildingFromList));
+
+const getContiguousFriendlyBuildingsRec = (state, playerId, buildings, contiguous = []) => {
+  if (buildings.length === 0) {
+    return contiguous;
+  }
+  const adjacentFriendlyBuildings = buildings.map(building => getAdjacentFriendlyBuildings(state, playerId, building.positions)).flat().filter(building => !isBuildingInList(building, contiguous));
+  return getContiguousFriendlyBuildingsRec(state, playerId, adjacentFriendlyBuildings, adjacentFriendlyBuildings.concat(contiguous));
+};
+
+export const getContiguousFriendlyBuildings = (state, playerId, positions) => {
+  return getContiguousFriendlyBuildingsRec(state, playerId, [{ positions }]);
+};

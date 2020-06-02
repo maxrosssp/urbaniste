@@ -1,4 +1,21 @@
-export const getPlayers = (state, playerId) => [state.players[playerId]].concat(Object.values(state.players).filter(player => player.id != playerId));
+import {
+  getPlayerBuildings
+} from '../utils';
+import {
+  getProject
+} from '../shop/projects';
+import {
+  getVictoryPoints
+} from '../shop/selectors';
+
+const getPlayerVictoryPoints = (state, playerId) => getPlayerBuildings(state, playerId).reduce((total, { name, positions }) => total + getVictoryPoints(getProject(name), state, playerId, positions), 0);
+
+export const getPlayers = (state, playerId) => [state.players[playerId]]
+  .concat(Object.values(state.players).filter(player => player.id != playerId))
+  .map(player => ({
+    ...player,
+    victoryPoints: getPlayerVictoryPoints(state, player.id)
+  }));
 
 export const getPlayerResources = (state, playerId) => state.players[playerId].resources;
 

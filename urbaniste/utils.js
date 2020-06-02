@@ -44,6 +44,7 @@ export function getAllAdjacentBuildings(state, positions) {
   return state.buildings.filter(building => building.positions.some(position => adjacentPositions.some(adjacentPosition => positionsAreEqual(adjacentPosition, position))));
 }
 
+export const getPlayerBuildings = (state, playerId) => state.buildings.filter(building => building.owner === playerId);
 export const getPlayerBuildingsOfType = (state, playerId, type) => state.buildings.filter(building => building.owner === playerId && building.name === type);
 
 const getPossibleSelectionsForTotal = (total, count) => {

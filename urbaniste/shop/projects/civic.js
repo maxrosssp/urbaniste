@@ -5,7 +5,8 @@ import {
 } from '../../constants.js';
 import {
   validateResourceTypes,
-  validateClaims
+  validateClaims,
+  getSortedTiles
 } from '../validation';
 
 export default {

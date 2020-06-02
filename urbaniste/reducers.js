@@ -5,6 +5,7 @@ import buildings from './buildings/reducers';
 
 export default function game(state = {}, action) {
   return {
+    ...state,
     players: players(state.players, action),
     tiles: tiles(state.tiles, action),
     shop: shop(state.shop, action),

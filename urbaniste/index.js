@@ -29,7 +29,7 @@ const EndTurn = {
 
 export const Urbaniste = {
   name: 'Urbaniste',
-  setup: (ctx, setupData) => moves.initialize(getPlayerConfigs(ctx.numPlayers)),
+  setup: (ctx, setupData = {}) => moves.initialize(setupData.name, getPlayerConfigs(ctx.numPlayers), setupData.boardConfig, setupData.shopConfig),
   turn: {
     activePlayers: { currentPlayer: 'expand', moveLimit: 1 },
     stages: {

@@ -14,8 +14,8 @@ import {
 import { getPlayerResources } from '../../../../../urbaniste/players/selectors';
 import { canTakeTileAtPosition } from '../../../../../urbaniste/tiles/validation';
 import { canBuildInPositions } from '../../../../../urbaniste/buildings/validation';
-import Tile from './Tile/Tile';
-import PayResources from './PayResources/PayResources';
+import Tile from './Tile';
+import PayResources from './PayResources';
 import './Board.scss';
 
 const KEY_ROTATIONS = {
@@ -90,7 +90,7 @@ function Board({
       ref={board}
       onKeyDown={onKeyDown}
     >
-      <HexGrid width={'100%'} viewBox="-7 -7 150 150">
+      <HexGrid width={'100%'} height={'100%'} viewBox="-7 -7 150 150">
         <Layout flat={false} size={{ x: 6.5, y: 6.5 }} spacing={1.025}>
           {getTiles(G).map(tile => (
             <Tile

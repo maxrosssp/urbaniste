@@ -1,0 +1,24 @@
+.table.rooms {
+
+  th .btn {
+    padding: 0px;
+    color: white;
+    font-weight: bold;
+  }
+
+  tr {
+    height: 32px;
+  }
+
+  tr.disabled {
+    opacity: 0.5;
+  }
+
+  tr.selected {
+    background-color: #6495ed;
+  }
+
+  tbody {
+    height: 306px;
+  }
+}

@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Lobby } from 'boardgame.io/react';
-import UrbanisteBoard from './js/Urbaniste';
-import { Urbaniste } from '../../urbaniste';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import UrbanisteGame from './UrbanisteGame';
+import UrbanisteLobby from './UrbanisteLobby';
+import 'status-indicator/styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './style/main.scss';
 
-const importedGames = [
-  { game: Urbaniste, board: UrbanisteBoard }
-];
 
 ReactDOM.render((
-  <Lobby
-    gameServer={`https://${window.location.hostname}:8000`}
-    lobbyServer={`https://${window.location.hostname}:8000`}
-    gameComponents={importedGames}
-  />
+  <BrowserRouter>
+    <Switch>
+      <Route path="/game/:gameID/:playerID/:credentials" component={UrbanisteGame}/>
+
+      <Route path="/" component={UrbanisteLobby} />
+    </Switch>
+  </BrowserRouter>
 ), document.getElementById('app'));

@@ -1,5 +1,20 @@
 @import './colors.scss';
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+}
+
 table.table {
   thead {
     color: $table-header-text;
@@ -13,8 +28,8 @@ table.table {
 }
 
 .urbaniste .col {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 10px;
+  padding-right: 5px;
 }
 
 .urbaniste .message-prompt {
@@ -22,4 +37,33 @@ table.table {
   border-style: solid;
   padding: 4px;
   margin-bottom: 17px;
+}
+
+.table-fixed {
+
+  tbody {
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  thead, tbody, tr, td, th {
+    display: block;
+  }
+
+  tbody td,
+  tbody th,
+  thead > tr > th {
+    float: left;
+    position: relative;
+
+    &::after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+  }
+}
+
+.waiting-for-players {
+  text-align: center;
 }

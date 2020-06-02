@@ -1,12 +1,10 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
-import Players from './components/Players/Players';
-import Shop from './components/Shop/Shop';
-import Board from './components/Board/Board';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/main.scss';
+import { Container, Row, Col, Button, Navbar } from 'react-bootstrap';
+import Players from './components/Players';
+import Shop from './components/Shop';
+import Board from './components/Board';
 
-function Urbaniste({
+function UrbanisteBoard({
   G,
   ctx,
   moves,
@@ -27,10 +25,14 @@ function Urbaniste({
   return (
     <Container className={`${ctx.playOrder.indexOf(playerID) === 0 ? 'first' : 'second'} urbaniste`} fluid={true}>
       <Row>
-        <Col className="col players-col" sm={2}>
+        <Col className="col shop-col" sm={5}>
           <Row>
             <Col sm={12}>
               <Players G={G} playerId={playerID} />
+            </Col>
+
+            <Col sm={12}>
+              <Shop G={G} stage={stage} moves={moves} events={events} isActive={isActive} playerId={playerID} />
             </Col>
 
             <Col sm={12}>
@@ -44,16 +46,12 @@ function Urbaniste({
           </Row>
         </Col>
 
-        <Col className="col board-col" sm={5}>
+        <Col className="col board-col" sm={7}>
           <Board G={G} stage={stage} moves={moves} events={events} isActive={isActive} playerId={playerID} />
-        </Col>
-        
-        <Col className="col shop-col" sm={{ span: 5 }}>
-          <Shop G={G} stage={stage} moves={moves} events={events} isActive={isActive} playerId={playerID} />
         </Col>
       </Row>
     </Container>
   );
 }
 
-export default Urbaniste;
+export default UrbanisteBoard;

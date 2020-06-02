@@ -14,9 +14,9 @@ import { getPlayerLastTake } from './players/selectors';
 const doActionAtPositions = (state, positions, getAction) => positions.reduce((state, position) => game(state, getAction(state, position)), state);
 
 export default {
-  initialize: (playerConfigs, boardConfig, shopConfig) => getStartPositions(boardConfig, playerConfigs).reduce(
+  initialize: (name, playerConfigs, boardConfig, shopConfig) => getStartPositions(boardConfig, playerConfigs).reduce(
     (state, positions, index) => doActionAtPositions(state, positions,(state, position) => takeTile(playerConfigs[index].id, position, getTile(state, position).resource)),
-    game({}, initializeGame(playerConfigs, boardConfig, shopConfig))
+    game({ name }, initializeGame(playerConfigs, boardConfig, shopConfig))
   ),
   take: (state, playerId, position) => game(state, takeTile(playerId, position, getTile(state, position).resource)),
   undoTake: (state, playerId) => {

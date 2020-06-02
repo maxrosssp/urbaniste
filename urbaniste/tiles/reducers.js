@@ -2,6 +2,7 @@ import initialize from './initialize';
 import {
   INITIALIZE_GAME,
   SET_TILE_OWNER,
+  REMOVE_TILE_OWNER,
   BUILD_ON_TILE,
   TAKE_TILE,
   UNDO_TAKE_TILE
@@ -21,6 +22,7 @@ function col(state = {}, action) {
         ...state,
         owner: action.playerId
       };
+    case REMOVE_TILE_OWNER:
     case UNDO_TAKE_TILE:
       return {
         ...state,

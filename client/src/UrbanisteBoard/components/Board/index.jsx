@@ -14,8 +14,8 @@ import {
   getSelectedProjectName,
   isSelectedProjectVariableCost
 } from '../../../../../urbaniste/shop/selectors';
-import { getPlayerResources, getEnemyPlayerId } from '../../../../../urbaniste/players/selectors';
-import { canTakeTileAtPosition } from '../../../../../urbaniste/tiles/validation';
+import { getPlayerResources, getEnemyResources } from '../../../../../urbaniste/players/selectors';
+import { canTakeTileAtPosition, canReplaceTileAtPosition } from '../../../../../urbaniste/tiles/validation';
 import { canBuildInPositions } from '../../../../../urbaniste/buildings/validation';
 import Tile from './Tile';
 import ResourcesModal from './ResourcesModal';
@@ -47,6 +47,7 @@ function Board({
   const [hasStolen, setHasStolen] = useState(false);
   const [ferryOptions, setFerryOptions] = useState(undefined);
   const [showResourceSelectModal, setShowResourceSelectModal] = useState(false);
+  const [replaceOptions, setReplaceOptions] = useState(undefined);
 
   const isInShape = (position) => shape.some(shapePosition => positionsAreEqual(shapePosition, position));
   const onKeyDown = ({key}) => setRotation(rotation + (KEY_ROTATIONS[key] || 0));
@@ -58,7 +59,7 @@ function Board({
   };
 
   const stealResources = (resources) => {
-    moves.StealResources(getEnemyPlayerId(G, playerId), resources);
+    moves.StealResources(resources);
     setShowStealModal(false);
     setHasStolen(true);
   };
@@ -75,6 +76,8 @@ function Board({
       } else {
         if (selectedProject === Building.FERRY) {
           setFerryOptions(getAllAdjacentTiles(G, getAllAdjacentTiles(G, shape).filter(tile => tile.resource === Resource.WATER).map(tile => tile.position)));
+        } else if (selectedProject === Building.MONUMENT) {
+          setReplaceOptions(getAllAdjacentTiles(G, getAllAdjacentTiles(G, shape).map(tile => tile.position)));
         }
         buildProject(getSelectedProjectCost(G, playerId, shape)[0]);
       }
@@ -87,6 +90,8 @@ function Board({
         attemptBuild();
       } else if (stage === 'ferry') {
         moves.Ferry(position, ferryOptions);
+      } else if (stage === 'replace') { 
+        moves.ReplaceTile(position, replaceOptions);
       } else {
         moves.TakeTile(position);
       }
@@ -97,6 +102,10 @@ function Board({
     if (stage === 'expand' || stage === 'ferry') {
       setShape([mouseOver]);
       setValidAtPosition(canTakeTileAtPosition(G, playerId, mouseOver, stage === 'ferry' && ferryOptions));
+      setHasStolen(false);
+    } else if (stage === 'replace') {
+      setShape([mouseOver]);
+      setValidAtPosition(canReplaceTileAtPosition(G, playerId, mouseOver, replaceOptions));
       setHasStolen(false);
     } else if (!hasStolen && stage === 'steal') {
       setShowStealModal(true);
@@ -113,8 +122,8 @@ function Board({
     <div
       className={classNames({
         board: true, 
-        valid: validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProject), 
-        invalid: !validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProject)
+        valid: validAtPosition && (stage === 'expand' || stage === 'replace' || stage === 'ferry' || selectedProject), 
+        invalid: !validAtPosition && (stage === 'expand' || stage === 'replace' || stage === 'ferry' || selectedProject)
       })}
       tabIndex="0"
       ref={board}
@@ -151,7 +160,7 @@ function Board({
         <ResourcesModal
           title="Steal Resources"
           buttonText="Steal"
-          resources={getPlayerResources(G, getEnemyPlayerId(G, playerId))}
+          resources={getEnemyResources(G, playerId)}
           validSelections={[{ [Resource.ANY]: 0 }, { [Resource.ANY]: 1 }, { [Resource.ANY]: 2 }]}
           onClose={stealResources}
           canCancel={false}

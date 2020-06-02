@@ -39,10 +39,12 @@ function UrbanisteBoard({
               <div className="message-prompt">{isTurn ? 'Your Turn' : 'Waiting for opponent.'}</div>
             </Col>
 
-            <Col sm={12}>
-              {stage === 'build' && <Button type="button" onClick={undoExpand}>Undo</Button>}
-              <Button type="button" onClick={() => moves.EndTurn()}>End Turn</Button>
-            </Col>
+            {isTurn && (
+              <Col sm={12}>
+                {stage === 'build' && <Button type="button" onClick={undoExpand}>Undo</Button>}
+                <Button type="button" onClick={() => moves.EndTurn()}>End Turn</Button>
+              </Col>
+            )}
           </Row>
         </Col>
 

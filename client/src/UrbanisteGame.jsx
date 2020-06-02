@@ -26,9 +26,7 @@ function UrbanisteGame() {
     getRoom(gameID).then(({ name, status }) => {
       setName(name);
       setIsWaitingForMorePlayers(status.negative === undefined);
-    }).finally(() => setIsLoading(false));
-
-    return leave;
+    }).catch(() => setHasLeftGame(true)).finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {

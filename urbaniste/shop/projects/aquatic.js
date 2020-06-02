@@ -13,6 +13,9 @@ import {
   validateResourceTypes,
   validateFriendlyAdjacent
 } from '../validation';
+import {
+  validateNoAdjacentBuildingType
+} from '../../buildings/validation';
 
 export default {
   [Building.BRIDGE]: {
@@ -62,6 +65,26 @@ export default {
     validator: (state, playerId, positions) => (
       getTilesAdjacentToAll(state, getTiles(state, positions).concat(getTilesAdjacentToAll(state, positions))).some(tile => tile.resource === Resource.WATER) &&
       validateClaims(state, positions, playerId, { friendly: 1 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.LOCK]: {
+    shape: Shape.DIAMOND,
+    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 2 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 4 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.MARINA]: {
+    shape: Shape.V3,
+    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3 }) &&
+      validateNoAdjacentBuildingType(state, positions, Building.MARINA) &&
+      getTilesAdjacentToAll(state, positions)[0].resource === Resource.WATER
     ),
     victoryPoints: 1
   }

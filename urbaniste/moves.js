@@ -4,7 +4,9 @@ import {
   buildProject,
   takeTile,
   buildOnTile,
-  undoTakeTile
+  undoTakeTile,
+  addPlayerResources,
+  removePlayerResources
 } from './actions';
 import game from './reducers';
 import { getTile, getStartPositions } from './utils';
@@ -27,5 +29,7 @@ export default {
     const name = getSelectedProjectName(state, playerId);
     return doActionAtPositions(game(state, buildProject(playerId, name, positions, resources)), positions, (_, position) => buildOnTile(playerId, position, name));
   },
-  selectProject: (state, playerId, name) => game(state, selectProject(playerId, name))
+  selectProject: (state, playerId, name) => game(state, selectProject(playerId, name)),
+  steal: (state, playerId, fromPlayer, resources) => game(game(state, addPlayerResources(playerId, resources)), removePlayerResources(fromPlayer, resources)),
+  addResources: (state, playerId, resources) => game(state, addPlayerResources(playerId, resources))
 };

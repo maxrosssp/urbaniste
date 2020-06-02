@@ -109,3 +109,5 @@ dist
 !.elasticbeanstalk/*.global.yml
 
 .DS_Store
+
+test.js

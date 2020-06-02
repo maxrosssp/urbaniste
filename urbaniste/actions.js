@@ -11,6 +11,8 @@ export const BUILD_ON_TILE = 'BUILD_ON_TILE';
 export const UNDO_TAKE_TILE = 'UNDO_TAKE_TILE';
 export const TAKE_TILES = 'TAKE_TILES';
 
+export const STEAL_RESOURCES = 'STEAL_RESOURCES';
+
 export const INITIALIZE_GAME = 'INITIALIZE_GAME';
 
 export function addPlayerResource(playerId, resource, count) {
@@ -47,6 +49,10 @@ export function takeTile(playerId, { row, col }, resource) {
 
 export function undoTakeTile(playerId, { row, col }, resource) {
   return { type: UNDO_TAKE_TILE, playerId, row, col, resource };
+}
+
+export function stealResources(playerId, fromPlayer, resources) {
+  return { type: STEAL_RESOURCES, playerId, fromPlayer, resources };
 }
 
 export function initializeGame(playerConfigs, boardConfig, shopConfig) {

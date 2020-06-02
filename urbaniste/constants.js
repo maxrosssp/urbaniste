@@ -26,7 +26,8 @@ const Shape = {
 	V5: 'V5',
 	U: 'U',
 	LINE_6: 'LINE_6',
-	STAR: 'STAR',
+  STAR: 'STAR',
+  Y: 'Y',
 	TRIANGLE_6: 'TRIANGLE_6'
 };
 
@@ -36,9 +37,19 @@ const Building = {
   CANAL: 'CANAL',
   FERRY: 'FERRY',
   LIGHTHOUSE: 'LIGHTHOUSE',
+  LOCK: 'LOCK',
+  MARINA: 'MARINA',
   BOULEVARD: 'BOULEVARD',
+  FOUNDRY: 'FOUNDRY',
+  PRISON: 'PRISON',
+  TRAMWAY: 'TRAMWAY',
+  TUNNEL: 'TUNNEL',
   TENEMENT: 'TENEMENT',
   BAZAAR: 'BAZAAR',
+  REFINERY: 'REFINERY',
+  CASINO: 'CASINO',
+  WATCHTOWER: 'WATCHTOWER',
+  LOAN_OFFICE: 'LOAN_OFFICE',
   TAXHOUSE: 'TAXHOUSE',
   CEMETARY: 'CEMETARY',
   SHIPYARD: 'SHIPYARD',
@@ -49,7 +60,15 @@ const Building = {
   PARC_DE_BUTTES_CHAUMONT: 'PARC_DE_BUTTES_CHAUMONT',
   RUE_DE_RIVOLI: 'RUE_DE_RIVOLI',
   CITY_HALL: 'CITY_HALL',
-  EMBASSY: 'EMBASSY'
+  EMBASSY: 'EMBASSY',
+  BOIS_VINCENNES: 'BOIS_VINCENNES',
+  CATHEDRAL: 'CATHEDRAL',
+  DOCKS: 'DOCKS',
+  GUILD_HALL: 'GUILD_HALL',
+  LE_HAVRE: 'LE_HAVRE',
+  MUSEE_LOUVRE: 'MUSEE_LOUVRE',
+  MUSEE_DORSAY: 'MUSEE_DORSAY',
+  WATERWORKS: 'WATERWORKS'
 };
 
 const BoardSize = {
@@ -188,6 +207,10 @@ const ShapePositions = {
   ],
   [Shape.STAR]: [
     [{ row: 0, col: 0 }, { row: -1, col: 0 }, { row: -1, col: 1 }, { row: 0, col: 1 }, { row: 1, col: 0 }, { row: 1, col: -1 }, { row: 0, col: -1 }]
+  ],
+  [Shape.Y]: [
+    [{ row: 0, col: 0 }, { row: -1, col: 0 }, { row: 0, col: 1 }, { row: 1, col: -1 }],
+    [{ row: 0, col: 0 }, { row: -1, col: 1 }, { row: 1, col: 0 }, { row: 0, col: -1 }]
   ],
   [Shape.TRIANGLE_6]: [
     [{ row: 0, col: 0 }, { row: -1, col: 0 }, { row: -1, col: 1 }, { row: -2, col: 0 }, { row: -2, col: 1 }, { row: -2, col: 2 }],

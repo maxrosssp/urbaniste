@@ -33,5 +33,42 @@ export default {
       validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
     ),
     victoryPoints: 1
+  },
+  [Building.REFINERY]: {
+    shape: Shape.LINE_2,
+    cost: { [Resource.ANY]: 3 },
+    allowedPayments: [{ [Resource.BUILDING_MATERIAL]: 3 }, { [Resource.COIN]: 3 }, { [Resource.LABOR]: 3 }],
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.CASINO]: {
+    shape: Shape.TRIANGLE_3,
+    cost: { [Resource.ANY]: 4 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.WATCHTOWER]: {
+    shape: Shape.SINGLE,
+    cost: { [Resource.COIN]: 2, [Resource.LABOR]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 1, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.LOAN_OFFICE]: {
+    shape: Shape.TRIANGLE_3,
+    cost: { [Resource.ANY]: 2 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
   }
 };

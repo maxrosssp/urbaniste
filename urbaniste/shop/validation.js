@@ -1,5 +1,6 @@
 import {
-  Resource
+  Resource,
+  Building
 } from '../constants';
 import {
   getTiles,

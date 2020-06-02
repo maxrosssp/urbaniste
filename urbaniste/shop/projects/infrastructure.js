@@ -7,8 +7,12 @@ import {
 import {
   getSortedTiles,
   getClaims,
-  validateResourceTypes
+  validateResourceTypes,
+  validateClaims
 } from '../validation';
+import {
+  getAllAdjacentBuildings
+} from '../../utils';
 
 export default {
   [Building.BOULEVARD]: {
@@ -23,6 +27,43 @@ export default {
         ((positions.length - claims.friendly.length) === claims.unclaimed.length) &&
         (claims.enemy.length === 0);
     },
+    victoryPoints: 1
+  },
+  [Building.FOUNDRY]: {
+    shape: Shape.LINE_2,
+    cost: { [Resource.LABOR]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.PRISON]: {
+    shape: Shape.LINE_2,
+    cost: { [Resource.COIN]: 2, [Resource.LABOR]: 2 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.TRAMWAY]: {
+    shape: Shape.LINE_3,
+    cost: { [Resource.BUILDING_MATERIAL]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 1
+  },
+  [Building.TUNNEL]: {
+    shape: Shape.SINGLE,
+    cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 1, enemy: 0, unclaimed: 0 }) &&
+      getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length === 1
+    ),
     victoryPoints: 1
   }
 };

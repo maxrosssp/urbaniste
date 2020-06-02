@@ -32,10 +32,46 @@ export default {
     class: 'lighthouse',
     type: ProjectTypes[ProjectType.AQUATIC]
   },
+  [Building.LOCK]: {
+    name: Building.LOCK,
+    label: 'Lock',
+    class: 'lock',
+    type: ProjectTypes[ProjectType.AQUATIC]
+  },
+  [Building.MARINA]: {
+    name: Building.MARINA,
+    label: 'Marina',
+    class: 'marina',
+    type: ProjectTypes[ProjectType.AQUATIC]
+  },
   [Building.BOULEVARD]: {
     name: Building.BOULEVARD,
     label: 'Boulevard',
     class: 'boulevard',
+    type: ProjectTypes[ProjectType.INFRASTRUCTURE]
+  },
+  [Building.FOUNDRY]: {
+    name: Building.FOUNDRY,
+    label: 'Foundry',
+    class: 'foundry',
+    type: ProjectTypes[ProjectType.INFRASTRUCTURE]
+  },
+  [Building.PRISON]: {
+    name: Building.PRISON,
+    label: 'Prison',
+    class: 'prison',
+    type: ProjectTypes[ProjectType.INFRASTRUCTURE]
+  },
+  [Building.TRAMWAY]: {
+    name: Building.TRAMWAY,
+    label: 'Tramway',
+    class: 'tramway',
+    type: ProjectTypes[ProjectType.INFRASTRUCTURE]
+  },
+  [Building.TUNNEL]: {
+    name: Building.TUNNEL,
+    label: 'Tunnel',
+    class: 'tunnel',
     type: ProjectTypes[ProjectType.INFRASTRUCTURE]
   },
   [Building.TENEMENT]: {
@@ -48,6 +84,30 @@ export default {
     name: Building.BAZAAR,
     label: 'Bazaar',
     class: 'bazaar',
+    type: ProjectTypes[ProjectType.COMMERCIAL]
+  },
+  [Building.REFINERY]: {
+    name: Building.REFINERY,
+    label: 'Refinery',
+    class: 'refinery',
+    type: ProjectTypes[ProjectType.COMMERCIAL]
+  },
+  [Building.CASINO]: {
+    name: Building.CASINO,
+    label: 'Casino',
+    class: 'casino',
+    type: ProjectTypes[ProjectType.COMMERCIAL]
+  },
+  [Building.WATCHTOWER]: {
+    name: Building.WATCHTOWER,
+    label: 'Watchtower',
+    class: 'watchtower',
+    type: ProjectTypes[ProjectType.COMMERCIAL]
+  },
+  [Building.LOAN_OFFICE]: {
+    name: Building.LOAN_OFFICE,
+    label: 'Loan Office',
+    class: 'loan-office',
     type: ProjectTypes[ProjectType.COMMERCIAL]
   },
   [Building.TAXHOUSE]: {
@@ -114,6 +174,54 @@ export default {
     name: Building.EMBASSY,
     label: 'Embassy',
     class: 'embassy',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.BOIS_VINCENNES]: {
+    name: Building.BOIS_VINCENNES,
+    label: 'Bois de Vincennes',
+    class: 'bois-vincennes',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.CATHEDRAL]: {
+    name: Building.CATHEDRAL,
+    label: 'Cathedral',
+    class: 'cathedral',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.DOCKS]: {
+    name: Building.DOCKS,
+    label: 'Docks',
+    class: 'docks',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.GUILD_HALL]: {
+    name: Building.GUILD_HALL,
+    label: 'Guild Hall',
+    class: 'guild-hall',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.LE_HAVRE]: {
+    name: Building.LE_HAVRE,
+    label: 'Le Havre',
+    class: 'le-havre',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.MUSEE_LOUVRE]: {
+    name: Building.MUSEE_LOUVRE,
+    label: 'Musée du Louvre',
+    class: 'musee-louvre',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.MUSEE_DORSAY]: {
+    name: Building.MUSEE_DORSAY,
+    label: 'Musée d\'Orsay',
+    class: 'musee-dorsay',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.WATERWORKS]: {
+    name: Building.WATERWORKS,
+    label: 'Waterworks',
+    class: 'waterworks',
     type: ProjectTypes[ProjectType.CULTURAL]
   }
 }

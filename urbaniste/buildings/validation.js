@@ -1,11 +1,13 @@
 import {
+  Building,
   ShapePositions
 } from '../constants';
 import {
   isPositionOnBoard,
   normalize,
   getTiles,
-  positionsAreEqual
+  positionsAreEqual,
+  getAllAdjacentBuildings
 } from '../utils';
 import {
   canBuildProjectInPositions,
@@ -20,12 +22,17 @@ export const validateShape = (positions, shape) => validateSize(positions, shape
 
 export const validateNoBuildingOverlap = (state, positions) => !getTiles(state, positions).some(tile => tile.building);
 
+export const validateNoAdjacentBuildingType = (state, positions, buildingName) => !getAllAdjacentBuildings(state, positions).some(building => building.name === buildingName);
+export const validateNoEnemyWatchtowerAdjacent = (state, positions, playerId) => !getAllAdjacentBuildings(state, positions).some(building => building.name === Building.WATCHTOWER && building.owner !== playerId);
+
 export const canBuildInPositions = (state, playerId, positions = []) => {
   const positionsOnBoard = positions.filter(position => isPositionOnBoard(state, position));
   const project = getSelectedProject(state, playerId);
   return project && project.name &&
     validateNoBuildingOverlap(state, positionsOnBoard) &&
     validateShape(positionsOnBoard, project.shape) &&
+    validateNoEnemyWatchtowerAdjacent(state, positionsOnBoard, playerId) &&
+    validateNoAdjacentBuildingType(state, positionsOnBoard, Building.CATHEDRAL) &&
     canBuildProjectInPositions(project, state, playerId, positionsOnBoard) &&
     project.validator(state, playerId, positionsOnBoard);
 };

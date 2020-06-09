@@ -11,7 +11,7 @@ const getResourceTypes = (tiles) => Object.values(Resource).reduce((resources, t
 export const validateResourceTypes = (state, positions, resources) => {
   const resourceTypes = getResourceTypes(getTiles(state, positions));
   return Object.keys(resources).every(type => resourceTypes[type] === resources[type]);
-}
+};
 
 export const validateWaterCount = (state, positions, count) => getResourceTypes(getTiles(state, positions))[Resource.WATER] === count;
 

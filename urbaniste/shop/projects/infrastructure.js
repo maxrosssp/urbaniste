@@ -36,7 +36,7 @@ export default {
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 3 },
     available: 5,
     validator: (state, positions, playerId) => (
-      getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length >= 1
+      getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length === 1
     ),
     victoryPoints: 3
   },

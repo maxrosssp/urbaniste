@@ -7,6 +7,7 @@ import {
 } from '../utils';
 import {
   isAcrossFromPlayerLock,
+  inViewOfPlayerLighthouse,
   validateNoEnemyWatchtowerAdjacent
 } from '../buildings/validation';
 
@@ -30,7 +31,9 @@ export const isPositionBuiltOn = (state, position) => {
 };
 
 export const canTakeTileAtPosition = (state, playerId, position) => (
-  isPositionOpenToTake(state, position) &&
-  (getAdjacentTiles(state, position).some(tile => tile.owner === playerId) || isAcrossFromPlayerLock(state, playerId, position)) &&
-  validateNoEnemyWatchtowerAdjacent(state, [position], playerId)
+  isPositionOpenToTake(state, position) && (
+    getAdjacentTiles(state, position).some(tile => tile.owner === playerId) || 
+    isAcrossFromPlayerLock(state, playerId, position) ||
+    inViewOfPlayerLighthouse(state, playerId, position)
+  ) && validateNoEnemyWatchtowerAdjacent(state, [position], playerId)
 );

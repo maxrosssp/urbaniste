@@ -44,7 +44,7 @@ export default {
   take: (state, playerId, position) => {
     const { resource } = getTile(state, position);
     const nextState = game(state, takeTile(playerId, position, resource));
-    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER)) {
+    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER || building.name === Building.MUSEE_DORSAY)) {
       return game(nextState, addPlayerResource(playerId, resource));
     }
     return nextState;
@@ -52,7 +52,7 @@ export default {
   undoTake: (state, playerId) => {
     const { position, resource } = getPlayerLastTake(state, playerId);
     const nextState = game(state, undoTakeTile(playerId, position, resource));
-    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER)) {
+    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER || building.name === Building.MUSEE_DORSAY)) {
       return game(nextState, removePlayerResources(playerId, { [resource]: 1 }));
     }
     return nextState;

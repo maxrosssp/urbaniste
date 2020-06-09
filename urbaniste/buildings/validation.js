@@ -17,7 +17,6 @@ import {
 } from '../shop/selectors';
 import {
   validateClaims,
-  validateWaterCount,
   validateCenter
 } from '../shop/validation';
 
@@ -35,6 +34,10 @@ export const validateNoEnemyWatchtowerAdjacent = (state, positions, playerId) =>
 export const isAcrossFromPlayerLock = (state, playerId, position) => getAdjacentTiles(state, position).some(tile => (
   tile.resource === Resource.WATER &&
   getAdjacentTiles(state, tile.position).some(tile => tile.owner === playerId && tile.building === Building.LOCK)
+));
+
+export const inViewOfPlayerLighthouse = (state, playerId, position) => getAdjacentTiles(state, position).some(tile => (
+  getAdjacentTiles(state, tile.position).some(tile => tile.owner === playerId && tile.building === Building.LIGHTHOUSE)
 ));
 
 export const canBuildInPositions = (state, playerId, positions = [], projectName) => {

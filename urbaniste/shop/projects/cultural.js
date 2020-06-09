@@ -143,6 +143,16 @@ export default {
     available: 1,
     victoryPoints: 2
   },
+  [Building.CATHEDRAL]: {
+    shape: Shape.V3,
+    claims: { friendly: 3 },
+    cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.LABOR]: 2 },
+    available: 1,
+    validator: (state, positions, playerId) => (
+      getAllAdjacentTiles(state, positions).every(tile => tile.owner !== playerId || !tile.building)
+    ),
+    victoryPoints: 6
+  },
   [Building.GRAND_CANAL]: {
     shape: Shape.V5,
     claims: [

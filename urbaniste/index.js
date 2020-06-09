@@ -19,7 +19,8 @@ import {
   isStingComplete
 } from './misc/selectors';
 import {
-  isPositionInList
+  isPositionInList,
+  getAllAdjacentTiles
 } from './utils';
 
 const getPlayerConfigs = (playerCount) => [...Array(playerCount).keys()].map(id => ({ id: id + '', name: 'Player ' + (id + 1) }));
@@ -42,7 +43,9 @@ const BuildProject = (G, ctx, projectName, positions, resources) => {
   if (canBuildInPositions(G, ctx.currentPlayer, positions, projectName)) {
     switch (projectName) {
       case Building.CASINO:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.STEAL, moveLimit: 1 });
+        if (getAllAdjacentTiles(G, positions).some(tile => tile.owner !== ctx.currentPlayer)) {
+          ctx.events.setActivePlayers({ currentPlayer: Stage.STEAL, moveLimit: 1 });
+        }
         break;
       case Building.FERRY:
         ctx.events.setActivePlayers({ currentPlayer: Stage.FERRY, moveLimit: 1 });

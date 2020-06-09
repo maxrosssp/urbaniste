@@ -20,7 +20,7 @@ function Shop({
       <Popover.Title as="h3">{Buildings[project.name].label}</Popover.Title>
 
       <Popover.Content>
-        <p>{Buildings[project.name].label.description}</p>
+        <p>{Buildings[project.name].description}</p>
 
         <ProjectShape projectName={project.name} />
       </Popover.Content>

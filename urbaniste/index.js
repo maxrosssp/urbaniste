@@ -38,11 +38,6 @@ const UndoTakeTile = {
   },
   noLimit: true
 };
-const SelectProject = {
-  move: (G, ctx, name) => moves.selectProject(G, ctx.currentPlayer, name),
-  noLimit: true,
-  undoable: true
-};
 const BuildProject = (G, ctx, projectName, positions, resources) => {
   if (canBuildInPositions(G, ctx.currentPlayer, positions, projectName)) {
     switch (projectName) {
@@ -158,57 +153,31 @@ export const Urbaniste = {
         next: Stage.BUILD
       },
       [Stage.BUILD]: {
-        moves: {
-          UndoTakeTile,
-          SelectProject,
-          BuildProject,
-          EndTurn
-        }
+        moves: { UndoTakeTile, BuildProject, EndTurn }
       },
       [Stage.STEAL]: {
-        moves: {
-          StealResources
-        }
+        moves: { StealResources }
       },
       [Stage.FERRY]: {
-        moves: {
-          Ferry,
-          EndTurn
-        }
+        moves: { Ferry, EndTurn }
       },
       [Stage.REPLACE]: {
-        moves: {
-          ReplaceEnemy,
-          EndTurn
-        }
+        moves: { ReplaceEnemy, EndTurn }
       },
       [Stage.LOAN]: {
-        moves: {
-          RecieveLoan
-        }
+        moves: { RecieveLoan }
       },
       [Stage.SET_GUILD]: {
-        moves: {
-          SetGuildPoints
-        }
+        moves: { SetGuildPoints }
       },
       [Stage.STING]: {
-        moves: {
-          Arrest,
-          EndTurn
-        }
+        moves: { Arrest, EndTurn }
       },
       [Stage.TUNNEL]: {
-        moves: {
-          Tunnel,
-          EndTurn
-        }
+        moves: { Tunnel, EndTurn }
       },
       [Stage.TRAM]: {
-        moves: {
-          Tram,
-          EndTurn
-        }
+        moves: { Tram, EndTurn }
       }
     }
   },

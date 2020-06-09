@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Button, Navbar } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import Players from './components/Players';
 import Shop from './components/Shop';
 import Board from './components/Board';
+import ResourcesModal from './components/ResourcesModal';
+import ResourceSelectModal from './components/ResourceSelectModal';
+import { Stage } from '../../../urbaniste/constants';
+import { getStage } from '../../../urbaniste/stages';
+import { getProjects } from '../../../urbaniste/shop/selectors';
+import { getTiles } from '../../../urbaniste/tiles/selectors';
 
 function UrbanisteBoard({
   G,
@@ -12,10 +19,37 @@ function UrbanisteBoard({
   playerID,
   isActive
 }) {
-  const [selectedProjectName, setSelectedProjectName] = useState(null);
-
+  const {
+    stageName,
+    getBoardState,
+    getResourcesModal,
+    getResourceSelectModal,
+    buttons
+  } = getStage(ctx.activePlayers !== null && ctx.activePlayers[playerID]) || {};
   const isTurn = ctx.currentPlayer === playerID;
-  const stage = ctx.activePlayers === null ? 'expand' : ctx.activePlayers[playerID];
+
+  const [projects, setProjects] = useState([]);
+  const [tiles, setTiles] = useState([]);
+  const [positionUnderMouse, setPositionUnderMouse] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [selectedProjectName, setSelectedProjectName] = useState(null);
+  const [boardState, setBoardState] = useState({ positionsToBuild: [], valid: false, canAct: false });
+
+  useEffect(() => {
+    const boardState = getBoardState ? getBoardState(G, playerID, positionUnderMouse, rotation, selectedProjectName)
+      : { positionsToBuild: [], valid: false, canAct: false };
+    setBoardState(boardState);
+  }, [positionUnderMouse, rotation]);
+
+  useEffect(() => {
+    setProjects(getProjects(G, playerID));
+    setTiles(getTiles(G));
+  }, [ctx]);
+
+  useEffect(() => {
+    setSelectedProjectName(null);
+  }, [stageName]);
+
   const undoExpand = () => {
     moves.UndoTakeTile();
   };
@@ -25,7 +59,13 @@ function UrbanisteBoard({
   }
 
   return (
-    <Container className={`${ctx.playOrder.indexOf(playerID) === 0 ? 'first' : 'second'} urbaniste`} fluid={true}>
+    <Container
+      className={classNames(ctx.playOrder.indexOf(playerID) === 0 ? 'first' : 'second', 'urbaniste', {
+        'player-active': isActive,
+        'player-turn': isTurn
+      })}
+      fluid={true}
+    >
       <Row>
         <Col className="col shop-col" sm={5}>
           <Row>
@@ -35,11 +75,10 @@ function UrbanisteBoard({
 
             <Col sm={12}>
               <Shop
-                G={G}
-                playerId={playerID}
+                projects={projects}
                 selectedProjectName={selectedProjectName}
                 onProjectSelect={setSelectedProjectName}
-                isBuildStage={stage === 'build'}
+                isBuildStage={stageName === Stage.BUILD}
               />
             </Col>
 
@@ -47,10 +86,10 @@ function UrbanisteBoard({
               <div className="message-prompt">{isTurn ? 'Your Turn' : 'Waiting for opponent.'}</div>
             </Col>
 
-            {isTurn && (
-              <Col sm={12}>
-                {stage === 'build' && <Button type="button" onClick={undoExpand}>Undo</Button>}
-                <Button type="button" onClick={() => moves.EndTurn()}>End Turn</Button>
+            {isTurn && buttons && (
+              <Col sm={12} className="move-buttons">
+                {buttons.indexOf('undoExpand') !== -1 && <Button type="button" onClick={undoExpand}>Undo</Button>}
+                {buttons.indexOf('endTurn') !== -1 && <Button type="button" onClick={() => moves.EndTurn()}>End Turn</Button>}
               </Col>
             )}
           </Row>
@@ -58,16 +97,31 @@ function UrbanisteBoard({
 
         <Col className="col board-col" sm={7}>
           <Board
-            G={G}
-            stage={stage}
+            state={G}
             moves={moves}
-            events={events}
-            isActive={isActive}
             playerId={playerID}
+            tiles={tiles}
+            setPositionUnderMouse={setPositionUnderMouse}
+            onRotate={(direction) => setRotation(rotation + direction)}
             selectedProjectName={selectedProjectName}
+            { ...boardState }
           />
         </Col>
       </Row>
+
+      {getResourcesModal && (
+        <ResourcesModal
+          moves={moves}
+          { ...getResourcesModal(G, playerID) }
+        />
+      )}
+
+      {getResourceSelectModal && (
+        <ResourceSelectModal
+          moves={moves}
+          { ...getResourceSelectModal() }
+        />
+      )}
     </Container>
   );
 }

@@ -27,7 +27,7 @@ export default {
   },
   [Building.HARBOR]: {
     shape: Shape.SINGLE,
-    cost: { [Resource.COIN]: 2, [Resource.LABOR]: 1 },
+    cost: { [Resource.COIN]: 3 },
     available: 5,
     validator: (state, playerId, positions) => (
       validateResourceTypes(state, positions, { [Resource.WATER]: 1 }) &&

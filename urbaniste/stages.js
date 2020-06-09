@@ -1,4 +1,5 @@
 import { Stage, Resource } from './constants';
+import Resources from '../client/src/UrbanisteBoard/constants/Resources.constant';
 import {
   getPositionsForShapeAtPosition
 } from './tiles/selectors';
@@ -116,20 +117,28 @@ const Stages = {
   },
   [Stage.STEAL]: {
     stageName: Stage.STEAL,
-    getResourcesModal: (state, playerId) => ({
-      title: 'Steal Resources',
-      buttonText: 'Steal',
-      resources: getEnemyResources(state, playerId),
-      validSelections: [{ [Resource.ANY]: 0 }, { [Resource.ANY]: 1 }, { [Resource.ANY]: 2 }],
-      canCancel: false,
-      onClose: ({ StealResources }, resources) => StealResources(resources)
-    })
+    getResourcesModal: (state, playerId) => {
+      const enemyResources = getEnemyResources(state, playerId);
+      return {
+        title: 'Steal Resources',
+        description: [
+          "Steal up to two enemy resources."
+        ],
+        buttonText: 'Steal',
+        resources: enemyResources,
+        validSelections: [{ [Resource.ANY]: 0 }, { [Resource.ANY]: 1 }, { [Resource.ANY]: 2 }],
+        canCancel: false,
+        onClose: ({ StealResources }, resources) => StealResources(resources)
+      };
+    }
   },
   [Stage.LOAN]: {
     stageName: Stage.LOAN,
     getResourceSelectModal: () => ({
       title: 'Select Resource',
-      description: 'Choose resource to be loaned:',
+      description: [
+        'Choose resource to be loaned:'
+      ],
       canCancel: false,
       onClose: ({ RecieveLoan }, resourceType) => RecieveLoan(resourceType)
     })
@@ -138,7 +147,9 @@ const Stages = {
     stageName: Stage.SET_GUILD,
     getResourceSelectModal: () => ({
       title: 'Select Resource',
-      description: '+1 Victory Point for every adjacent tile with the selected resource:',
+      description: [
+        '+1 Victory Point for every adjacent tile with the selected resource:'
+      ],
       canCancel: false,
       onClose: ({ SetGuildPoints }, resourceType) => SetGuildPoints(resourceType)
     })

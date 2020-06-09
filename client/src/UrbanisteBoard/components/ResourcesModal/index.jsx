@@ -20,6 +20,7 @@ import './ResourcesModal.scss';
 function ResourcesModal({
   moves,
   title,
+  description,
   buttonText,
   resources,
   validSelections,
@@ -56,10 +57,10 @@ function ResourcesModal({
     }
   }, [selectedResources]);
 
-  const ResourceInput = (type) => (
+  const ResourceInput = (type, label) => (
     <Form.Group as={Row} controlId={type}>
-      <Form.Label column sm="4">{Resources[type].label}</Form.Label>
-      <Col sm="8">
+      <Form.Label column sm="6">{label}</Form.Label>
+      <Col sm="6">
         <InputGroup>
           <Form.Control
             ref={refs[type]}
@@ -100,12 +101,25 @@ function ResourcesModal({
       </Modal.Header>
 
       <Modal.Body>
+        {description && (
+          <p>{description.map(line => <>{line}<br/></>)}</p>
+        )}
+
         <Form>
-          {ResourceInput(Resource.BUILDING_MATERIAL)}
+          {ResourceInput(
+            Resource.BUILDING_MATERIAL,
+            `${Resources[Resource.BUILDING_MATERIAL].label} (max: ${resources[Resource.BUILDING_MATERIAL]})`
+          )}
 
-          {ResourceInput(Resource.COIN)}
+          {ResourceInput(
+            Resource.COIN,
+            `${Resources[Resource.COIN].label} (max: ${resources[Resource.COIN]})`
+          )}
 
-          {ResourceInput(Resource.LABOR)}
+          {ResourceInput(
+            Resource.LABOR,
+            `${Resources[Resource.LABOR].label} (max: ${resources[Resource.LABOR]})`
+          )}
         </Form>
       </Modal.Body>
 

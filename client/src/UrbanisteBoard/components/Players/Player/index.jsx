@@ -22,18 +22,21 @@ function Player({
     >
       <thead>
         <tr>
-          <th className="text-center table-header">
+          <th className="table-header">
             {playerId === player.id ? 'My Resources' : 'Enemy Resources'}
           </th>
+
           <th>
             {`VP: ${player.victoryPoints}`}
           </th>
         </tr>
       </thead>
+
       <tbody>
         {Object.keys(player.resources).map(resource => Resources[resource]).map(resource => (
           <tr key={resource.name} className={resource.class}>
             <td>{resource.label}</td>
+            
             <td>{player.resources[resource.name]}</td>
           </tr>
         ))}

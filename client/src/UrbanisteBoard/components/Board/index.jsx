@@ -1,26 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
 import { HexGrid, Layout } from 'react-hexgrid';
-import {
-  positionsAreEqual,
-  getAllAdjacentTiles
-} from '../../../../../urbaniste/utils';
-import {
-  getTiles,
-  getPositionsForShapeAtPosition
-} from '../../../../../urbaniste/tiles/selectors';
-import {
-  getProjectCost,
-  isProjectVariableCost
-} from '../../../../../urbaniste/shop/selectors';
-import { getPlayerResources, getEnemyPlayerId } from '../../../../../urbaniste/players/selectors';
-import { canTakeTileAtPosition } from '../../../../../urbaniste/tiles/validation';
-import { canBuildInPositions } from '../../../../../urbaniste/buildings/validation';
+import { positionsAreEqual } from '../../../../../urbaniste/utils';
 import Tile from './Tile';
 import ResourcesModal from '../ResourcesModal';
-import ResourceSelectModal from '../ResourceSelectModal';
 import './Board.scss';
-import { Resource, Building } from '../../../../../urbaniste/constants';
 
 const KEY_ROTATIONS = {
   ArrowLeft: -1,
@@ -30,144 +14,83 @@ const KEY_ROTATIONS = {
 };
 
 function Board({
-  G,
-  stage,
+  state,
   moves,
   playerId,
-  selectedProjectName
+  tiles,
+  setPositionUnderMouse,
+  positionsToBuild,
+  valid,
+  onRotate,
+  selectedProjectName,
+  canAct,
+  getValueToInclude,
+  onTileClick,
+  drag
 }) {
   const board = useRef(null);
-  const [mouseOver, setMouseOver] = useState(undefined);
-  const [shape, setShape] = useState([]);
-  const [rotation, setRotation] = useState(0);
-  const [validAtPosition, setValidAtPosition] = useState(true);
-  const [showPayModal, setShowPayModal] = useState(false);
-  const [showStealModal, setShowStealModal] = useState(false);
-  const [hasStolen, setHasStolen] = useState(false);
-  const [ferryOptions, setFerryOptions] = useState(undefined);
-  const [showResourceSelectModal, setShowResourceSelectModal] = useState(false);
+  const [toInclude, setToInclude] = useState(null);
 
-  const isInShape = (position) => shape.some(shapePosition => positionsAreEqual(shapePosition, position));
-  const onKeyDown = ({key}) => setRotation(rotation + (KEY_ROTATIONS[key] || 0));
-  const onHover = (position) => board.current.focus() || setMouseOver(position);
-
-  const buildProject = (resources) => {
-    if (selectedProjectName) {
-      moves.BuildProject(selectedProjectName, shape, resources);
-      setShowPayModal(false);
+  const isHighlighted = (position) => positionsToBuild.some(positionToHilight => positionsAreEqual(positionToHilight, position));
+  const onHover = (position) => board.current.focus() || setPositionUnderMouse(position);
+  const onKeyDown = ({key}) => KEY_ROTATIONS[key] && onRotate(KEY_ROTATIONS[key]);
+  
+  const onClickTile = () => {
+    if (onTileClick || getValueToInclude) {
+      const valueToInclude = getValueToInclude && getValueToInclude(state, playerId, selectedProjectName, positionsToBuild);
+      (valid && valueToInclude) ? setToInclude(valueToInclude) : onTileClick(moves, positionsToBuild, selectedProjectName);
     }
   };
 
-  const stealResources = (resources) => {
-    moves.StealResources(resources);
-    setShowStealModal(false);
-    setHasStolen(true);
+  const onPayResources = (resources) => {
+    setToInclude(null);
+    onTileClick && onTileClick(moves, positionsToBuild, selectedProjectName, resources);
   };
-
-  const getLoan = (resourceType) => {
-    moves.RecieveLoan(resourceType);
-    setShowResourceSelectModal(false);
-  };
-
-  const attemptBuild = () => {
-    if (validAtPosition) {
-      if (isProjectVariableCost(G, playerId, selectedProjectName, shape)) {
-        setShowPayModal(true);
-      } else {
-        if (selectedProjectName === Building.FERRY) {
-          setFerryOptions(getAllAdjacentTiles(G, getAllAdjacentTiles(G, shape).filter(tile => tile.resource === Resource.WATER).map(tile => tile.position)));
-        }
-        buildProject(getProjectCost(G, playerId, selectedProjectName, shape)[0]);
-      }
-    }
-  };
-
-  const onTileClick = (position) => {
-    if (validAtPosition) {
-      if (stage === 'build') {
-        attemptBuild();
-      } else if (stage === 'ferry') {
-        moves.Ferry(position, ferryOptions);
-      } else {
-        moves.TakeTile(position);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (stage === 'expand' || stage === 'ferry') {
-      setShape([mouseOver]);
-      setValidAtPosition(canTakeTileAtPosition(G, playerId, mouseOver, stage === 'ferry' && ferryOptions));
-      setHasStolen(false);
-    } else if (!hasStolen && stage === 'steal') {
-      setShowStealModal(true);
-    } else if (stage === 'loan') {
-      setShowResourceSelectModal(true);
-    } else {
-      const positions = getPositionsForShapeAtPosition(mouseOver, rotation, selectedProjectName);
-      setShape(positions);
-      setValidAtPosition(canBuildInPositions(G, playerId, positions, selectedProjectName));
-    }
-  }, [mouseOver, rotation]);
 
   return (
-    <div
-      className={classNames({
-        board: true, 
-        valid: validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProjectName), 
-        invalid: !validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProjectName)
-      })}
-      tabIndex="0"
-      ref={board}
-      onKeyDown={onKeyDown}
-    >
-      <HexGrid width={'100%'} height={'100%'} viewBox="-7 -7 150 150">
-        <Layout flat={false} size={{ x: 6.5, y: 6.5 }} spacing={1.025}>
-          {getTiles(G).map(tile => (
-            <Tile
-              key={tile.position.row + '' + tile.position.col} 
-              tile={tile}
-              playerId={playerId}
-              onHover={onHover}
-              highlighted={isInShape(tile.position)}
-              onTileClick={onTileClick}
-            />
-          ))}
-        </Layout>
-      </HexGrid>
+    <>
+      <div
+        className={classNames({
+          board: true,
+          'board-active': canAct,
+          valid: valid,
+          invalid: !valid
+        })}
+        tabIndex="0"
+        ref={board}
+        onKeyDown={onKeyDown}
+      >
+        <HexGrid width={'100%'} height={'100%'} viewBox="-7 -7 150 150">
+          <Layout flat={false} size={{ x: 6.5, y: 6.5 }} spacing={1.025}>
+            {tiles.map(tile => (
+              <Tile
+                key={tile.position.row + '' + tile.position.col}
+                moves={moves}
+                tile={tile}
+                playerId={playerId}
+                onHover={onHover}
+                highlighted={canAct && isHighlighted(tile.position)}
+                onTileClick={onClickTile}
+                drag={drag}
+              />
+            ))}
+          </Layout>
+        </HexGrid>
+      </div>
 
-      {showPayModal && (
+      {toInclude && toInclude.name === 'payResources' && (
         <ResourcesModal
+          moves={moves}
           title="Pay Resources"
           buttonText="Pay"
-          resources={getPlayerResources(G, playerId)}
-          validSelections={getProjectCost(G, playerId, selectedProjectName, shape)}
-          onClose={buildProject}
-          onDismiss={() => setShowPayModal(false)}
+          resources={toInclude.playerResources}
+          validSelections={toInclude.validPayments}
+          onClose={(_, resources) => onPayResources(resources)}
+          onDismiss={() => setToInclude(null)}
           canCancel={true}
         />
       )}
-
-      {showStealModal && (
-        <ResourcesModal
-          title="Steal Resources"
-          buttonText="Steal"
-          resources={getPlayerResources(G, getEnemyPlayerId(G, playerId))}
-          validSelections={[{ [Resource.ANY]: 0 }, { [Resource.ANY]: 1 }, { [Resource.ANY]: 2 }]}
-          onClose={stealResources}
-          canCancel={false}
-        />
-      )}
-
-      {showResourceSelectModal && (
-        <ResourceSelectModal
-          title="Select Resource"
-          description="Choose resource to be loaned:"
-          canCancel={false}
-          onClose={getLoan}
-        />
-      )}
-    </div>
+    </>
   );
 }
 

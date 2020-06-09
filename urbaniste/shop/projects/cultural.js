@@ -78,7 +78,7 @@ export default {
   },
   [Building.BOIS_VINCENNES]: {
     shape: Shape.LINE_2,
-    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 1, [Resource.LABOR]: 2 },
+    cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.COIN]: 1, [Resource.LABOR]: 2 },
     available: 1,
     validator: (state, playerId, positions) => (
       validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })

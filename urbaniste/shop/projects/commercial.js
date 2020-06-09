@@ -15,7 +15,7 @@ export default {
   [Building.TENEMENT]: {
     shape: Shape.TRIANGLE_3,
     cost: (state, playerId) => ({
-      [Resource.ANY]: Math.max(4 - getPlayerBuildingsOfType(state, playerId, Building.TENEMENT).length, 0)
+      [Resource.ANY]: Math.max(5 - getPlayerBuildingsOfType(state, playerId, Building.TENEMENT).length, 0)
     }),
     available: 5,
     validator: (state, playerId, positions) => (
@@ -44,15 +44,6 @@ export default {
     ),
     victoryPoints: 1
   },
-  [Building.CASINO]: {
-    shape: Shape.TRIANGLE_3,
-    cost: { [Resource.ANY]: 4 },
-    available: 5,
-    validator: (state, playerId, positions) => (
-      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
-    ),
-    victoryPoints: 0
-  },
   [Building.WATCHTOWER]: {
     shape: Shape.SINGLE,
     cost: { [Resource.COIN]: 2, [Resource.LABOR]: 3 },
@@ -70,5 +61,14 @@ export default {
       validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
     ),
     victoryPoints: -1
+  },
+  [Building.CASINO]: {
+    shape: Shape.TRIANGLE_3,
+    cost: { [Resource.ANY]: 4 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 0
   }
 };

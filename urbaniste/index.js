@@ -12,6 +12,7 @@ import {
   getLastFerryValidLandingPositions,
   getLastMonumentValidReplacePositions,
   getLastTunnelValidLandingPositions,
+  getLastTramwayAdjacentTiles,
   getStingRemainingOptions
 } from './buildings/selectors';
 import {
@@ -69,6 +70,9 @@ const BuildProject = (G, ctx, projectName, positions, resources) => {
       case Building.TUNNEL:
         ctx.events.setActivePlayers({ currentPlayer: Stage.TUNNEL, moveLimit: 1 });
         break;
+      case Building.TRAMWAY:
+        ctx.events.setActivePlayers({ currentPlayer: Stage.TRAM, moveLimit: 1 });
+        break;
       default:
         ctx.events.endTurn();
     }
@@ -102,6 +106,15 @@ const Tunnel = (G, ctx, position) => {
   if (isPositionInList(position, getLastTunnelValidLandingPositions(G, ctx.currentPlayer))) {
     ctx.events.endTurn();
     return moves.setOwner(G, ctx.currentPlayer, position);
+  }
+  return INVALID_MOVE;
+};
+const Tram = (G, ctx, fromPosition, toPosition) => {
+  const tramwayAdjacentTiles = getLastTramwayAdjacentTiles(G, ctx.currentPlayer);
+  if (isPositionInList(fromPosition, tramwayAdjacentTiles.filter(tile => tile.owner && !tile.building).map(tile => tile.position)) 
+      && isPositionInList(toPosition, tramwayAdjacentTiles.filter(tile => !tile.owner).map(tile => tile.position))) {
+    ctx.events.endTurn();
+    return moves.moveTile(G, fromPosition, toPosition);
   }
   return INVALID_MOVE;
 };
@@ -188,6 +201,12 @@ export const Urbaniste = {
       [Stage.TUNNEL]: {
         moves: {
           Tunnel,
+          EndTurn
+        }
+      },
+      [Stage.TRAM]: {
+        moves: {
+          Tram,
           EndTurn
         }
       }

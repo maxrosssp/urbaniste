@@ -38,12 +38,6 @@ export default {
     class: 'lock',
     type: ProjectTypes[ProjectType.AQUATIC]
   },
-  [Building.MARINA]: {
-    name: Building.MARINA,
-    label: 'Marina',
-    class: 'marina',
-    type: ProjectTypes[ProjectType.AQUATIC]
-  },
   [Building.BOULEVARD]: {
     name: Building.BOULEVARD,
     label: 'Boulevard',
@@ -204,6 +198,12 @@ export default {
     name: Building.LE_HAVRE,
     label: 'Le Havre',
     class: 'le-havre',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.MARINA]: {
+    name: Building.MARINA,
+    label: 'Marina',
+    class: 'marina',
     type: ProjectTypes[ProjectType.CULTURAL]
   },
   [Building.MUSEE_LOUVRE]: {

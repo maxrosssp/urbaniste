@@ -8,6 +8,7 @@ import {
   addPlayerResources,
   removePlayerResources,
   setTileOwner,
+  removeTileOwner,
   setBuildingPoints,
   planSting,
   arrest
@@ -62,5 +63,9 @@ export default {
   setGuildPoints: (state, playerId, resourceType) => {
     return game(state, setBuildingPoints(Building.GUILD_HALL, getLastGuildHallAdjacentTiles(state, playerId).filter(tile => !tile.building && tile.resource === resourceType).length))
   },
-  arrest: (state, position) => game(state, arrest(position))
+  arrest: (state, position) => game(state, arrest(position)),
+  moveTile: (state, fromPosition, toPosition) => {
+    const { position, owner } = getTile(state, fromPosition);
+    return game(game(state, setTileOwner(owner, toPosition)), removeTileOwner(position));
+  }
 };

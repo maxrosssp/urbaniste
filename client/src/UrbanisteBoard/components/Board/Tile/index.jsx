@@ -6,17 +6,39 @@ import Buildings from '../../../constants/Buildings.constant';
 import './Tile.scss';
 
 function Tile({
+  moves,
   tile,
   playerId,
   onHover,
   highlighted,
   onKeyDown,
-  onTileClick
+  onTileClick,
+  drag
 }) {
   const { position, resource, owner, building } = tile;
   const { row, col } = position;
   const project = Buildings[building] || {};
   const projectType = project.type || {};
+  const { canDrag, canDrop, onDrop } = drag || {};
+
+  const onDragStart = (event, source) => {
+  };
+
+  const onDragEnd = (event, source, success) => {
+    if (!drag || !canDrag() || !success) {
+      return;
+    }
+  };
+
+  const onDropTile = (event, source, target) => {
+    onDrop(moves, { ...target.data.position }, { row: source.props.r, col: source.props.q });
+  }
+
+  const onDragOver = (event, source) => {
+    if (drag && canDrag() && canDrop({ row: source.props.r, col: source.props.q })) {
+      event.preventDefault();
+    }
+  }
 
   return (
     <Hexagon
@@ -27,7 +49,7 @@ function Tile({
         [project.class]: building,
         [projectType.class]: building,
         mine: owner === playerId,
-        enemy: owner !== playerId
+        enemy: owner && owner !== playerId
       })}
       r={row}
       q={col}
@@ -35,6 +57,12 @@ function Tile({
       onClick={() => onTileClick(position)}
       onMouseEnter={() => onHover(position)}
       onKeyDown={onKeyDown}
+      data={tile}
+      draggable={canDrag && canDrag()}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDrop={onDropTile}
+      onDragOver={onDragOver}
     >
       {owner && <Text>{owner === playerId ? 'Mine' : 'Enemy'}</Text>}
     </Hexagon>

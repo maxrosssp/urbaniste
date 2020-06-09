@@ -18,6 +18,7 @@ import Resources from '../../constants/Resources.constant';
 import './ResourcesModal.scss';
 
 function ResourcesModal({
+  moves,
   title,
   buttonText,
   resources,
@@ -110,7 +111,7 @@ function ResourcesModal({
 
       <Modal.Footer>
         {canCancel && <Button variant="secondary" onClick={onDismiss}>Cancel</Button>}
-        <Button disabled={!isValid} variant="primary" onClick={() => onClose(selectedResources)}>{buttonText}</Button>
+        <Button disabled={!isValid} variant="primary" onClick={() => onClose(moves, selectedResources)}>{buttonText}</Button>
       </Modal.Footer>
     </Modal>
   );

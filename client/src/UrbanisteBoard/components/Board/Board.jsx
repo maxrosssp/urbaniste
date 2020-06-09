@@ -15,6 +15,7 @@ const KEY_ROTATIONS = {
 
 function Board({
   state,
+  moves,
   playerId,
   tiles,
   setPositionUnderMouse,
@@ -24,7 +25,8 @@ function Board({
   selectedProjectName,
   canAct,
   getValueToInclude,
-  onAction
+  onTileClick,
+  drag
 }) {
   const board = useRef(null);
   const [toInclude, setToInclude] = useState(null);
@@ -33,14 +35,16 @@ function Board({
   const onHover = (position) => board.current.focus() || setPositionUnderMouse(position);
   const onKeyDown = ({key}) => KEY_ROTATIONS[key] && onRotate(KEY_ROTATIONS[key]);
   
-  const onTileClick = () => {
-    const valueToInclude = getValueToInclude && getValueToInclude(state, playerId, selectedProjectName, positionsToBuild);
-    (valid && valueToInclude) ? setToInclude(valueToInclude) : onAction();
+  const onClickTile = () => {
+    if (onTileClick || getValueToInclude) {
+      const valueToInclude = getValueToInclude && getValueToInclude(state, playerId, selectedProjectName, positionsToBuild);
+      (valid && valueToInclude) ? setToInclude(valueToInclude) : onTileClick(moves, positionsToBuild, selectedProjectName);
+    }
   };
 
   const onPayResources = (resources) => {
     setToInclude(null);
-    onAction(resources);
+    onTileClick && onTileClick(moves, positionsToBuild, selectedProjectName, resources);
   };
 
   return (
@@ -60,12 +64,14 @@ function Board({
           <Layout flat={false} size={{ x: 6.5, y: 6.5 }} spacing={1.025}>
             {tiles.map(tile => (
               <Tile
-                key={tile.position.row + '' + tile.position.col} 
+                key={tile.position.row + '' + tile.position.col}
+                moves={moves}
                 tile={tile}
                 playerId={playerId}
                 onHover={onHover}
                 highlighted={canAct && isHighlighted(tile.position)}
-                onTileClick={onTileClick}
+                onTileClick={onClickTile}
+                drag={drag}
               />
             ))}
           </Layout>
@@ -74,11 +80,12 @@ function Board({
 
       {toInclude && toInclude.name === 'payResources' && (
         <ResourcesModal
+          moves={moves}
           title="Pay Resources"
           buttonText="Pay"
           resources={toInclude.playerResources}
           validSelections={toInclude.validPayments}
-          onClose={onPayResources}
+          onClose={(_, resources) => onPayResources(resources)}
           onDismiss={() => setToInclude(null)}
           canCancel={true}
         />

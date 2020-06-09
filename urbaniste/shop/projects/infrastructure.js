@@ -46,16 +46,6 @@ export default {
     ),
     victoryPoints: 2
   },
-  //NEEDS STAGE
-  [Building.TRAMWAY]: {
-    shape: Shape.LINE_3,
-    cost: { [Resource.BUILDING_MATERIAL]: 3 },
-    available: 5,
-    validator: (state, playerId, positions) => (
-      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
-    ),
-    victoryPoints: 2
-  },
   [Building.TUNNEL]: {
     shape: Shape.SINGLE,
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 3 },
@@ -65,5 +55,14 @@ export default {
       getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length === 1
     ),
     victoryPoints: 3
+  },
+  [Building.TRAMWAY]: {
+    shape: Shape.LINE_3,
+    cost: { [Resource.BUILDING_MATERIAL]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 3, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 2
   }
 };

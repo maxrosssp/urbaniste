@@ -10,6 +10,7 @@ import Resources from '../../constants/Resources.constant';
 import './ResourceSelectModal.scss';
 
 function ResourceSelectModal({
+  moves,
   title,
   description,
   canCancel,
@@ -27,11 +28,11 @@ function ResourceSelectModal({
       <Modal.Body>
         <p>{description}</p>
         
-        <Button variant="primary" onClick={() => onClose(Resource.BUILDING_MATERIAL)}>{Resources[Resource.BUILDING_MATERIAL].label}</Button>
+        <Button variant="primary" onClick={() => onClose(moves, Resource.BUILDING_MATERIAL)}>{Resources[Resource.BUILDING_MATERIAL].label}</Button>
 
-        <Button variant="primary" onClick={() => onClose(Resource.COIN)}>{Resources[Resource.COIN].label}</Button>
+        <Button variant="primary" onClick={() => onClose(moves, Resource.COIN)}>{Resources[Resource.COIN].label}</Button>
 
-        <Button variant="primary" onClick={() => onClose(Resource.LABOR)}>{Resources[Resource.LABOR].label}</Button>
+        <Button variant="primary" onClick={() => onClose(moves, Resource.LABOR)}>{Resources[Resource.LABOR].label}</Button>
       </Modal.Body>
 
       <Modal.Footer>

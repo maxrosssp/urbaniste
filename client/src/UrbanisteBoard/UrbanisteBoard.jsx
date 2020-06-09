@@ -24,8 +24,7 @@ function UrbanisteBoard({
     getBoardState,
     getResourcesModal,
     getResourceSelectModal,
-    buttons,
-    action
+    buttons
   } = getStage(ctx.activePlayers !== null && ctx.activePlayers[playerID]) || {};
   const isTurn = ctx.currentPlayer === playerID;
 
@@ -105,7 +104,6 @@ function UrbanisteBoard({
             setPositionUnderMouse={setPositionUnderMouse}
             onRotate={(direction) => setRotation(rotation + direction)}
             selectedProjectName={selectedProjectName}
-            onAction={(valueToInclude) => action(moves, boardState, selectedProjectName, valueToInclude)}
             { ...boardState }
           />
         </Col>
@@ -113,18 +111,15 @@ function UrbanisteBoard({
 
       {getResourcesModal && (
         <ResourcesModal
+          moves={moves}
           { ...getResourcesModal(G, playerID) }
-          onClose={(resources) => action(moves, resources)}
         />
       )}
 
       {getResourceSelectModal && (
         <ResourceSelectModal
+          moves={moves}
           { ...getResourceSelectModal() }
-          // title="Select Resource"
-          // description="Choose resource to be loaned:"
-          // canCancel={false}
-          onClose={(resourceType) => action(moves, resourceType)}
         />
       )}
     </Container>

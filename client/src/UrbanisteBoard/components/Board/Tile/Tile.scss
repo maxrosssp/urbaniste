@@ -2,20 +2,22 @@
 @import '../../../../style/mixins.scss';
 
 .player-active {
-  [draggable] {
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -moz-user-drag: element;
-    -webkit-user-drag: element;
-    -khtml-user-drag: element;
-    user-drag: element;
-  }
-  
-  .board.board-active.valid svg g.highlighted polygon {
-    stroke: $valid-build-position;
-    stroke-width: 0.6px;
+  .board.board-active.valid {
+    [draggable] {
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -moz-user-drag: element;
+      -webkit-user-drag: element;
+      -khtml-user-drag: element;
+      user-drag: element;
+    }
+
+    svg g.highlighted polygon {
+      stroke: $valid-build-position;
+      stroke-width: 0.6px;
+    }
   }
 
   .board.board-active.invalid svg g.highlighted polygon {

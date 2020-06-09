@@ -29,8 +29,15 @@ export const validateClaims = (state, positions, playerId, claims) => {
   return Object.keys(claims).every(claim => claims[claim] === claimTypes[claim].length);
 };
 
-const compareRows = (tileA, tileB) => tileA.position.row - tileB.position.row;
-const compareCols = (tileA, tileB) => tileA.position.col - tileB.position.col;
-const sortByRows = (tiles) => tiles.sort(compareRows);
-const sortByCols = (tiles) => tiles.sort(compareCols);
-export const getSortedTiles = (state, positions) => sortByCols(sortByRows(getTiles(state, positions)));
+const compareRows = ({ row }, position) => row - position.row;
+const compareCols = ({ col }, position) => col - position.col;
+const sortByRows = (positions) => [...positions].sort(compareRows);
+const sortByCols = (positions) => [...positions].sort(compareCols);
+const sortPositions = (positions) => sortByRows(sortByCols(positions));
+const uniqueRows = (positions) => [...new Set(positions.map(position => position.row))].length === positions.length;
+const uniqueCols = (positions) => [...new Set(positions.map(position => position.col))].length === positions.length;
+
+export const getSortedTiles = (state, positions) => getTiles(state,
+  uniqueRows(positions) ? sortByRows(positions)
+    : (uniqueCols(positions) ? sortByCols(positions)
+      : sortPositions(positions)));

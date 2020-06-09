@@ -28,7 +28,7 @@ export default {
     },
     victoryPoints: 2
   },
-  [Building.FOUNDRY]: {
+  [Building.PLAZA]: {
     shape: Shape.LINE_2,
     cost: { [Resource.LABOR]: 3 },
     available: 5,

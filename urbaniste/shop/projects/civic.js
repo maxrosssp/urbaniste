@@ -24,7 +24,7 @@ export default {
     cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.COIN]: 2 },
     available: 5,
     validator: (state, playerId, positions) => (
-      validateClaims(state, positions, playerId, { friendly: 1, unclaimed: 2 }) &&
+      validateClaims(state, positions, playerId, { friendly: 1, enemy: 2 }) &&
       validateResourceTypes(state, positions, { [Resource.WATER]: 0 }) &&
       getSortedTiles(state, positions)[1].owner !== playerId
     ),
@@ -40,16 +40,6 @@ export default {
     ),
     victoryPoints: 2
   },
-  [Building.SEWERS]: {
-    shape: Shape.LINE_3,
-    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.LABOR]: 3 },
-    available: 5,
-    validator: (state, playerId, positions) => (
-      validateClaims(state, positions, playerId, { friendly: 1, enemy: 1, unclaimed: 1 }) &&
-      getSortedTiles(state, positions)[1].owner === playerId
-    ),
-    victoryPoints: 2
-  },
   [Building.MONUMENT]: {
     shape: Shape.LINE_2,
     cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.COIN]: 1, [Resource.LABOR]: 1 },
@@ -57,6 +47,20 @@ export default {
     validator: (state, playerId, positions) => (
       validateClaims(state, positions, playerId, { friendly: 2 })
     ),
+    victoryPoints: 2
+  },
+  [Building.SEWERS]: {
+    shape: Shape.LINE_3,
+    cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.LABOR]: 3 },
+    available: 5,
+    validator: (state, playerId, positions) => {
+      const { owner } = getSortedTiles(state, positions)[1];
+      return (
+        validateClaims(state, positions, playerId, { friendly: 1, enemy: 1, unclaimed: 1 }) &&
+        validateResourceTypes(state, positions, { [Resource.WATER]: 0 }) &&
+        owner && owner !== playerId
+      );
+    },
     victoryPoints: 2
   }
 };

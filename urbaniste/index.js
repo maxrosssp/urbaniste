@@ -55,7 +55,7 @@ const BuildProject = (G, ctx, projectName, positions, resources) => {
       case Building.MONUMENT:
         ctx.events.setActivePlayers({ currentPlayer: Stage.REPLACE, moveLimit: 1 });
         break;
-      case Building.FOUNDRY:
+      case Building.PLAZA:
         ctx.events.setActivePlayers({ currentPlayer: Stage.EXPAND, moveLimit: 1 });
         break;
       case Building.LOAN_OFFICE:

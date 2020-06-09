@@ -11,11 +11,13 @@ import {
   removeTileOwner,
   setBuildingPoints,
   planSting,
-  arrest
+  arrest,
+  addPlayerResource
 } from './actions';
 import game from './reducers';
 import {
   getTile,
+  getAllAdjacentBuildings,
   getStartPositions,
   getResources
 } from './utils';
@@ -40,11 +42,20 @@ export default {
     game({ name }, initializeGame(playerConfigs, boardConfig, shopConfig))
   ),
   take: (state, playerId, position) => {
-    return game(state, takeTile(playerId, position, getTile(state, position).resource))
+    const { resource } = getTile(state, position);
+    const nextState = game(state, takeTile(playerId, position, resource));
+    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER)) {
+      return game(nextState, addPlayerResource(playerId, resource));
+    }
+    return nextState;
   },
   undoTake: (state, playerId) => {
     const { position, resource } = getPlayerLastTake(state, playerId);
-    return game(state, undoTakeTile(playerId, position, resource));
+    const nextState = game(state, undoTakeTile(playerId, position, resource));
+    if (getAllAdjacentBuildings(nextState, [position]).some(building => building.name === Building.OPERA_GARNIER)) {
+      return game(nextState, removePlayerResources(playerId, { [resource]: 1 }));
+    }
+    return nextState;
   },
   build: (state, playerId, projectName, positions, resources) => {
     const nextState = doActionAtPositions(game(state, buildProject(playerId, projectName, positions, resources || getProjectCost(state, playerId, projectName, positions)[0])), positions, (_, position) => buildOnTile(playerId, position, projectName));

@@ -66,6 +66,16 @@ export default {
     ),
     victoryPoints: (state, _, positions) => getAllAdjacentBuildings(state, positions).filter(building => building.name !== Building.EMBASSY).length
   },
+  [Building.TOUR_EIFFEL]: {
+    shape: Shape.SINGLE,
+    cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 1 },
+    available: 1,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 1 }) &&
+      getAllAdjacentTiles(state, positions).every(tile => tile.building)
+    ),
+    victoryPoints: 6
+  },
   [Building.BOIS_VINCENNES]: {
     shape: Shape.LINE_2,
     cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 1, [Resource.LABOR]: 2 },
@@ -147,5 +157,14 @@ export default {
       getTilesAdjacentToAll(state, positions)[0].resource === Resource.WATER
     ),
     victoryPoints: 6
+  },
+  [Building.OPERA_GARNIER]: {
+    shape: Shape.LINE_2,
+    cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 2, [Resource.LABOR]: 2 },
+    available: 1,
+    validator: (state, playerId, positions) => (
+      validateClaims(state, positions, playerId, { friendly: 2, enemy: 0, unclaimed: 0 })
+    ),
+    victoryPoints: 2
   }
 };

@@ -20,7 +20,8 @@ export default {
     available: 5,
     validator: (state, playerId, positions) => (
       getSortedTiles(state, positions)[1].resource === Resource.WATER &&
-      validateClaims(state, positions, playerId, { friendly: 1, unclaimed: 1 })
+      validateResourceTypes(state, positions, { [Resource.WATER]: 1 }) &&
+      validateClaims(state, positions, playerId, { friendly: 1, unclaimed: 2 })
     ),
     victoryPoints: 3
   },

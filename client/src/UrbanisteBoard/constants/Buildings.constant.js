@@ -6,7 +6,8 @@ export default {
     name: Building.BRIDGE,
     label: 'Bridge',
     class: 'bridge',
-    type: ProjectTypes[ProjectType.AQUATIC]
+    type: ProjectTypes[ProjectType.AQUATIC],
+    description: ''
   },
   [Building.HARBOR]: {
     name: Building.HARBOR,
@@ -44,10 +45,10 @@ export default {
     class: 'boulevard',
     type: ProjectTypes[ProjectType.INFRASTRUCTURE]
   },
-  [Building.FOUNDRY]: {
-    name: Building.FOUNDRY,
-    label: 'Foundry',
-    class: 'foundry',
+  [Building.PLAZA]: {
+    name: Building.PLAZA,
+    label: 'Plaza',
+    class: 'plaza',
     type: ProjectTypes[ProjectType.INFRASTRUCTURE]
   },
   [Building.PRISON]: {
@@ -170,6 +171,12 @@ export default {
     class: 'embassy',
     type: ProjectTypes[ProjectType.CULTURAL]
   },
+  [Building.TOUR_EIFFEL]: {
+    name: Building.TOUR_EIFFEL,
+    label: 'Tour Eiffel',
+    class: 'tour-eiffel',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
   [Building.BOIS_VINCENNES]: {
     name: Building.BOIS_VINCENNES,
     label: 'Bois de Vincennes',
@@ -222,6 +229,12 @@ export default {
     name: Building.WATERWORKS,
     label: 'Waterworks',
     class: 'waterworks',
+    type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.OPERA_GARNIER]: {
+    name: Building.OPERA_GARNIER,
+    label: 'Opéra Garnier',
+    class: 'opera-garnier',
     type: ProjectTypes[ProjectType.CULTURAL]
   }
 }

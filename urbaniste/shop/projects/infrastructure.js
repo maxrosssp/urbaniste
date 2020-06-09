@@ -37,7 +37,6 @@ export default {
     ),
     victoryPoints: 1
   },
-  //NEEDS STAGE
   [Building.PRISON]: {
     shape: Shape.LINE_2,
     cost: { [Resource.COIN]: 2, [Resource.LABOR]: 2 },
@@ -57,7 +56,6 @@ export default {
     ),
     victoryPoints: 2
   },
-  //NEEDS STAGE
   [Building.TUNNEL]: {
     shape: Shape.SINGLE,
     cost: { [Resource.BUILDING_MATERIAL]: 1, [Resource.COIN]: 1, [Resource.LABOR]: 3 },

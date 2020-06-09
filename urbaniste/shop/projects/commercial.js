@@ -34,7 +34,6 @@ export default {
     ),
     victoryPoints: 3
   },
-  //NEEDS ADDITIONAL ACTION
   [Building.REFINERY]: {
     shape: Shape.LINE_2,
     cost: { [Resource.ANY]: 3 },

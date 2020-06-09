@@ -3,7 +3,7 @@ import { useParams, Redirect } from "react-router-dom";
 import { Container, Button, Navbar, Spinner } from 'react-bootstrap';
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer';
-import UrbanisteBoard from './UrbanisteBoard';
+import UrbanisteBoard from './UrbanisteBoard/UrbanisteBoard';
 import { Urbaniste } from '../../urbaniste';
 import { getRoom, leaveRoom } from './services/lobby';
 

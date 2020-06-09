@@ -5,20 +5,17 @@ import { Resource } from '../../../../../urbaniste/constants';
 import Resources from '../../constants/Resources.constant';
 import ProjectTypes from '../../constants/ProjectTypes.constant';
 import Buildings from '../../constants/Buildings.constant';
-import {
-  getProjects,
-  getSelectedProjectName
-} from '../../../../../urbaniste/shop/selectors';
+import { getProjects } from '../../../../../urbaniste/shop/selectors';
 import './Shop.scss';
 
 function Shop({
-  G,
-  stage,
-  moves,
-  events,
-  isActive,
-  playerId
+  projects,
+  onProjectSelect,
+  selectedProjectName,
+  isBuildStage
 }) {
+  const onRowClick = (projectName) => isBuildStage && onProjectSelect(projectName === selectedProjectName ? null : projectName);
+
   return (
     <Table className="shop" striped borderless hover responsive size="sm">
       <thead>
@@ -34,9 +31,9 @@ function Shop({
         </tr>
       </thead>
       <tbody>
-        {getProjects(G, playerId).map(project => (
-          <tr key={project.name} onClick={() => moves.SelectProject(project.name)}>
-            <td className={classNames({ 'can-build': project.canBuild, selected: getSelectedProjectName(G, playerId) === project.name })}>{Buildings[project.name].label}</td>
+        {projects.map(project => (
+          <tr key={project.name} onClick={() => onRowClick(project.name)}>
+            <td className={classNames({ 'can-build': isBuildStage && project.canBuild, selected: selectedProjectName === project.name })}>{Buildings[project.name].label}</td>
             <td className={ProjectTypes[project.type].class}>{ProjectTypes[project.type].label}</td>
             <td className={`${Resources[Resource.BUILDING_MATERIAL].class} text-center`}>{project[Resource.BUILDING_MATERIAL] || 0}</td>
             <td className={`${Resources[Resource.COIN].class} text-center`}>{project[Resource.COIN] || 0}</td>

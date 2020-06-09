@@ -1,7 +1,6 @@
 import { DefaultShopProjectTypes } from '../constants';
 import { shuffle } from '../utils.js';
 import {
-  getProject,
   projectsByType
 } from './projects';
 

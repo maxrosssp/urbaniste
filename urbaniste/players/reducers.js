@@ -6,7 +6,9 @@ import {
   REMOVE_PLAYER_RESOURCES,
   TAKE_TILE,
   UNDO_TAKE_TILE,
-  SELECT_PROJECT,
+  SET_TILE_OWNER,
+  REMOVE_TILE_OWNER,
+  ARREST,
   BUILD_PROJECT
 } from '../actions';
 
@@ -47,20 +49,10 @@ function resources(state = {}, action) {
   }
 }
 
-function selectedProject(state = undefined, action) {
-  switch (action.type) {
-    case SELECT_PROJECT:
-      return state === action.name ? undefined : action.name;
-    case BUILD_PROJECT:
-    case UNDO_TAKE_TILE:
-      return undefined;
-    default:
-      return state;
-  }
-}
-
 function taken(state = [], action) {
   switch (action.type) {
+    case SET_TILE_OWNER:
+      return [{ position: { row: action.row, col: action.col } }].concat(state);
     case TAKE_TILE:
       return [{ position: { row: action.row, col: action.col }, resource: action.resource }].concat(state);
     case UNDO_TAKE_TILE:
@@ -74,7 +66,6 @@ function player(state = {}, action) {
   return {
     ...state,
     resources: resources(state.resources, action),
-    selectedProject: selectedProject(state.selectedProject, action),
     taken: taken(state.taken, action)
   };
 }
@@ -88,8 +79,19 @@ export default function players(state = {}, action) {
     return state;
   }
 
+  var nextState = state;
+  if (action.type === SET_TILE_OWNER || action.type === ARREST || action.type === REMOVE_TILE_OWNER) {
+    nextState = Object.keys(state).reduce((filteredPlayers, playerId) => ({
+      ...filteredPlayers,
+      [playerId]: {
+        ...state[playerId],
+        taken: state[playerId].taken.filter(tile => tile.position.row !== action.row && tile.position.col !== action.col)
+      }
+    }), nextState);
+  }
+
   return {
-    ...state,
-    [action.playerId]: player(state[action.playerId], action)
+    ...nextState,
+    [action.playerId]: player(nextState[action.playerId], action)
   };
 }

@@ -50,7 +50,6 @@ export default {
     ),
     victoryPoints: 2
   },
-  //NEEDS STAGE
   [Building.MONUMENT]: {
     shape: Shape.LINE_2,
     cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.COIN]: 1, [Resource.LABOR]: 1 },

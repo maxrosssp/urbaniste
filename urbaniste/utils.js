@@ -25,6 +25,7 @@ export const getStartPositions = ({ boardSize = 'classic' } = {}, playerConfigs 
 export const moveInDirection = ({ row, col }, direction) => ({ row: row + direction.row, col: col + direction.col });
 export const normalize = ({ row, col }, positions) => positions.map(position => moveInDirection({ row, col }, position));
 export const positionsAreEqual = (positionA, positionB) => positionA && positionB && positionA.row === positionB.row && positionA.col === positionB.col;
+export const isPositionInList = (position, positionList) => positionList.some(positionFromList => positionsAreEqual(positionFromList, position));
 
 export const isPositionOnBoard = (state, { row, col }) => state.tiles[row] && state.tiles[row][col];
 export const getTile = (state, { row, col }) => state.tiles[row][col];
@@ -35,6 +36,8 @@ export const getTilesAdjacentToAll = (state, positions) => {
   var adjacentTilesByTiles = positions.map(position => getAdjacentTiles(state, position));
   return getAllAdjacentTiles(state, positions).filter(adjacentTile => adjacentTilesByTiles.every(adjacentTiles => adjacentTiles.some(tile => positionsAreEqual(tile.position, adjacentTile.position))));
 };
+
+export const getResources = (state, positions) => getTiles(state, positions).reduce((resources, tile) => ({ ...resources, [tile.resource]: (resources[tile.resource] || 0) + 1 }), {});
 
 export function getAllAdjacentBuildings(state, positions) {
   if (!positions) {

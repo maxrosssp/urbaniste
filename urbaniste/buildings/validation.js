@@ -1,17 +1,19 @@
 import {
   Building,
+  Resource,
   ShapePositions
 } from '../constants';
 import {
   isPositionOnBoard,
   normalize,
   getTiles,
+  getAdjacentTiles,
   positionsAreEqual,
   getAllAdjacentBuildings
 } from '../utils';
 import {
   canBuildProjectInPositions,
-  getSelectedProject
+  getProject
 } from '../shop/selectors';
 
 const shapesAreEqual = (positionsA, positionsB) => positionsA.length === positionsB.length && !positionsA.some(positionA => !positionsB.some(positionB => positionsAreEqual(positionA, positionB)));
@@ -25,9 +27,14 @@ export const validateNoBuildingOverlap = (state, positions) => !getTiles(state, 
 export const validateNoAdjacentBuildingType = (state, positions, buildingName) => !getAllAdjacentBuildings(state, positions).some(building => building.name === buildingName);
 export const validateNoEnemyWatchtowerAdjacent = (state, positions, playerId) => !getAllAdjacentBuildings(state, positions).some(building => building.name === Building.WATCHTOWER && building.owner !== playerId);
 
-export const canBuildInPositions = (state, playerId, positions = []) => {
+export const isAcrossFromPlayerLock = (state, playerId, position) => getAdjacentTiles(state, position).some(tile => (
+  tile.resource === Resource.WATER &&
+  getAdjacentTiles(state, tile.position).some(tile => tile.owner === playerId && tile.building === Building.LOCK)
+));
+
+export const canBuildInPositions = (state, playerId, positions = [], projectName) => {
   const positionsOnBoard = positions.filter(position => isPositionOnBoard(state, position));
-  const project = getSelectedProject(state, playerId);
+  const project = getProject(state, projectName);
   return project && project.name &&
     validateNoBuildingOverlap(state, positionsOnBoard) &&
     validateShape(positionsOnBoard, project.shape) &&

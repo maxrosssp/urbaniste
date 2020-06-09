@@ -8,7 +8,6 @@ const createPlayer = ({ id, name }) => ({
     [Resource.COIN]: 0,
     [Resource.LABOR]: 0
   },
-  selectedProject: undefined,
   taken: []
 });
 

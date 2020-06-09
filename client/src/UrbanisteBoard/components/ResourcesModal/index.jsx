@@ -9,12 +9,12 @@ import {
 } from 'react-bootstrap';
 import {
   Resource
-} from '../../../../../../urbaniste/constants';
+} from '../../../../../urbaniste/constants';
 import {
   getResourceSelectionValues,
   selectionsAreEqual
-} from '../../../../../../urbaniste/utils';
-import Resources from '../../../constants/Resources.constant';
+} from '../../../../../urbaniste/utils';
+import Resources from '../../constants/Resources.constant';
 import './ResourcesModal.scss';
 
 function ResourcesModal({

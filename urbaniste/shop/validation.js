@@ -7,7 +7,7 @@ import {
   getAllAdjacentTiles
 } from '../utils';
 
-const getResourceTypes = (tiles) => Object.values(Resource).reduce((resources, type) => ({ ...resources, [type]: tiles.filter(tile => tile.resource === type).length }));
+const getResourceTypes = (tiles) => Object.values(Resource).reduce((resources, type) => ({ ...resources, [type]: tiles.filter(tile => tile.resource === type).length }), {});
 
 export const validateResourceTypes = (state, positions, resources) => {
   const resourceTypes = getResourceTypes(getTiles(state, positions));

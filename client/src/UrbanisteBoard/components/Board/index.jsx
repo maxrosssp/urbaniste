@@ -10,16 +10,15 @@ import {
   getPositionsForShapeAtPosition
 } from '../../../../../urbaniste/tiles/selectors';
 import {
-  getSelectedProjectCost,
-  getSelectedProjectName,
-  isSelectedProjectVariableCost
+  getProjectCost,
+  isProjectVariableCost
 } from '../../../../../urbaniste/shop/selectors';
 import { getPlayerResources, getEnemyPlayerId } from '../../../../../urbaniste/players/selectors';
 import { canTakeTileAtPosition } from '../../../../../urbaniste/tiles/validation';
 import { canBuildInPositions } from '../../../../../urbaniste/buildings/validation';
 import Tile from './Tile';
-import ResourcesModal from './ResourcesModal';
-import ResourceSelectModal from './ResourceSelectModal';
+import ResourcesModal from '../ResourcesModal';
+import ResourceSelectModal from '../ResourceSelectModal';
 import './Board.scss';
 import { Resource, Building } from '../../../../../urbaniste/constants';
 
@@ -34,9 +33,9 @@ function Board({
   G,
   stage,
   moves,
-  playerId
+  playerId,
+  selectedProjectName
 }) {
-  const selectedProject = getSelectedProjectName(G, playerId);
   const board = useRef(null);
   const [mouseOver, setMouseOver] = useState(undefined);
   const [shape, setShape] = useState([]);
@@ -53,12 +52,14 @@ function Board({
   const onHover = (position) => board.current.focus() || setMouseOver(position);
 
   const buildProject = (resources) => {
-    moves.BuildProject(shape, resources);
-    setShowPayModal(false);
+    if (selectedProjectName) {
+      moves.BuildProject(selectedProjectName, shape, resources);
+      setShowPayModal(false);
+    }
   };
 
   const stealResources = (resources) => {
-    moves.StealResources(getEnemyPlayerId(G, playerId), resources);
+    moves.StealResources(resources);
     setShowStealModal(false);
     setHasStolen(true);
   };
@@ -70,13 +71,13 @@ function Board({
 
   const attemptBuild = () => {
     if (validAtPosition) {
-      if (isSelectedProjectVariableCost(G, playerId, shape)) {
+      if (isProjectVariableCost(G, playerId, selectedProjectName, shape)) {
         setShowPayModal(true);
       } else {
-        if (selectedProject === Building.FERRY) {
+        if (selectedProjectName === Building.FERRY) {
           setFerryOptions(getAllAdjacentTiles(G, getAllAdjacentTiles(G, shape).filter(tile => tile.resource === Resource.WATER).map(tile => tile.position)));
         }
-        buildProject(getSelectedProjectCost(G, playerId, shape)[0]);
+        buildProject(getProjectCost(G, playerId, selectedProjectName, shape)[0]);
       }
     }
   };
@@ -103,9 +104,9 @@ function Board({
     } else if (stage === 'loan') {
       setShowResourceSelectModal(true);
     } else {
-      const positions = getPositionsForShapeAtPosition(G, playerId, mouseOver, rotation);
+      const positions = getPositionsForShapeAtPosition(mouseOver, rotation, selectedProjectName);
       setShape(positions);
-      setValidAtPosition(canBuildInPositions(G, playerId, positions));
+      setValidAtPosition(canBuildInPositions(G, playerId, positions, selectedProjectName));
     }
   }, [mouseOver, rotation]);
 
@@ -113,8 +114,8 @@ function Board({
     <div
       className={classNames({
         board: true, 
-        valid: validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProject), 
-        invalid: !validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProject)
+        valid: validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProjectName), 
+        invalid: !validAtPosition && (stage === 'expand' || stage === 'ferry' || selectedProjectName)
       })}
       tabIndex="0"
       ref={board}
@@ -128,7 +129,7 @@ function Board({
               tile={tile}
               playerId={playerId}
               onHover={onHover}
-              inShape={isInShape(tile.position)}
+              highlighted={isInShape(tile.position)}
               onTileClick={onTileClick}
             />
           ))}
@@ -140,7 +141,7 @@ function Board({
           title="Pay Resources"
           buttonText="Pay"
           resources={getPlayerResources(G, playerId)}
-          validSelections={getSelectedProjectCost(G, playerId, shape)}
+          validSelections={getProjectCost(G, playerId, selectedProjectName, shape)}
           onClose={buildProject}
           onDismiss={() => setShowPayModal(false)}
           canCancel={true}

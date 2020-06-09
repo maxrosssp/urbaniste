@@ -5,8 +5,8 @@ import {
 } from 'react-bootstrap';
 import {
   Resource
-} from '../../../../../../urbaniste/constants';
-import Resources from '../../../constants/Resources.constant';
+} from '../../../../../urbaniste/constants';
+import Resources from '../../constants/Resources.constant';
 import './ResourceSelectModal.scss';
 
 function ResourceSelectModal({

@@ -222,6 +222,19 @@ const ShapePositions = {
   ]
 };
 
+const Stage = {
+  EXPAND: 'EXPAND',
+  BUILD: 'BUILD',
+  STEAL: 'STEAL',
+  FERRY: 'FERRY',
+  LOAN: 'LOAN',
+  REPLACE: 'REPLACE',
+  SET_GUILD: 'SET_GUILD',
+  STING: 'STING',
+  TUNNEL: 'TUNNEL',
+  TRAM: 'TRAM'
+};
+
 export {
   Resource,
   ProjectType,
@@ -232,5 +245,6 @@ export {
   TileGroups,
   Directions,
   DefaultShopProjectTypes,
-  ShapePositions
+  ShapePositions,
+  Stage
 };

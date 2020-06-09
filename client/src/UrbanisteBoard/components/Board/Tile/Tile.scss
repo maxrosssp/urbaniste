@@ -1,14 +1,16 @@
 @import '../../../../style/colors.scss';
 @import '../../../../style/mixins.scss';
 
-.board.valid svg g.in-shape polygon {
-  stroke: $valid-build-position;
-  stroke-width: 0.6px;
-}
+.player-active {
+  .board.board-active.valid svg g.highlighted polygon {
+    stroke: $valid-build-position;
+    stroke-width: 0.6px;
+  }
 
-.board.invalid svg g.in-shape polygon {
-  stroke: $invalid-build-position;
-  stroke-width: 0.6px;
+  .board.board-active.invalid svg g.highlighted polygon {
+    stroke: $invalid-build-position;
+    stroke-width: 0.6px;
+  }
 }
 
 .first svg g {
@@ -36,8 +38,8 @@ svg {
   g {
     .hexagon:hover,
     .hexagon:hover text,
-    .in-shape > g.hexagon,
-    .in-shape > g.hexagon text {
+    .highlighted > g.hexagon,
+    .highlighted > g.hexagon text {
       fill-opacity: 0.6;
     }
     

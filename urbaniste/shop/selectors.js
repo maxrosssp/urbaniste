@@ -1,6 +1,6 @@
 import { Resource, Building } from '../constants';
 import {
-  getProject
+  getProjectConfig
 } from './projects';
 import {
   validateShape,
@@ -13,8 +13,11 @@ import {
   isPositionOnBoard
 } from '../utils';
 import {
-  getAllPlayerTiles
+  getPlayerPossibleBuildTiles
 } from '../tiles/selectors';
+import {
+  getBuildingPoints
+} from '../misc/selectors';
 
 const canAffordPayment = (playerResources, payment) => {
   const remainingCost = { ...payment };
@@ -29,7 +32,7 @@ const canAffordPayment = (playerResources, payment) => {
 const canAfford = (playerResources, allowedPayments) => allowedPayments.some(payment => canAffordPayment(playerResources, payment));
 const getAvailable = (project) => project.available - project.count;
 export const getCost = (project, state, playerId, positions) => (project && typeof project.cost === 'function') ? project.cost(state, playerId, positions) : (project || {}).cost;
-export const getVictoryPoints = (project, state, playerId, positions = []) => (typeof project.victoryPoints === 'function') ? project.victoryPoints(state, playerId, positions) : project.victoryPoints;
+export const getVictoryPoints = (project, state, playerId, positions = []) => getBuildingPoints(state, project.name) || (typeof project.victoryPoints === 'function' ? project.victoryPoints(state, playerId, positions) : project.victoryPoints);
 
 export const canBuildProjectInPositions = (project, state, playerId, positions) => getAvailable(project) > 0 && canAfford(state.players[playerId].resources, project.allowedPayments || [getCost(project, state, playerId, positions)]);
 
@@ -42,30 +45,28 @@ const canBuildProjectAtPosition = (project, state, playerId, position) => getAll
     canBuildProjectInPositions(project, state, playerId, positionsOnBoard) &&
     project.validator(state, playerId, positionsOnBoard);
 });
-export const canBuild = (project, state, playerId) => getAllPlayerTiles(state, playerId).filter(tile => !tile.building).some(tile => canBuildProjectAtPosition(project, state, playerId, tile.position));
+export const canBuild = (project, state, playerId) => getPlayerPossibleBuildTiles(state, playerId).some(tile => canBuildProjectAtPosition(project, state, playerId, tile.position));
 
-const getFullProject = (state, projectName) => ({ ...state.shop.projects[projectName], ...getProject(projectName) });
+export const getProject = (state, projectName) => ({ ...state.shop.projects[projectName], ...getProjectConfig(projectName) });
 
-const getVictoryPointsDisplay = (project) => (typeof project.victoryPoints === 'function') ? '?' : project.victoryPoints;
+const getVictoryPointsDisplay = (state, project) => getBuildingPoints(state, project.name) || (typeof project.victoryPoints === 'function' ? '?' : project.victoryPoints);
 
-export const getProjects = (state, playerId) => Object.values(state.shop.projects).map(projectInShop => {
-  const project = { ...projectInShop, ...getProject(projectInShop.name) };
+export const getProjects = (state, playerId) => Object.values(state.shop.projects).map(({ name }) => {
+  const project = getProject(state, name);
   return {
     ...project,
     canBuild: canBuild(project, state, playerId),
     ...getCost(project, state, playerId),
     available: getAvailable(project),
-    vp: getVictoryPointsDisplay(project)
+    vp: getVictoryPointsDisplay(state, project)
   };
 });
 
-export const getSelectedProjectName = (state, playerId) => state.players[playerId].selectedProject;
-export const getSelectedProject = (state, playerId) => getFullProject(state, getSelectedProjectName(state, playerId));
-export const isSelectedProjectVariableCost = (state, playerId, positions) => {
-  const project = getSelectedProject(state, playerId);
+export const isProjectVariableCost = (state, playerId, projectName, positions) => {
+  const project = getProject(state, projectName);
   return project.allowedPayments !== undefined || getCost(project, state, playerId, positions)[Resource.ANY] > 0;
 };
-export const getSelectedProjectCost = (state, playerId, positions) => {
-  const project = getSelectedProject(state, playerId);
+export const getProjectCost = (state, playerId, projectName, positions) => {
+  const project = getProject(state, projectName);
   return project.allowedPayments || [getCost(project, state, playerId, positions)];
 };

@@ -9,7 +9,7 @@ function Tile({
   tile,
   playerId,
   onHover,
-  inShape,
+  highlighted,
   onKeyDown,
   onTileClick
 }) {
@@ -22,7 +22,7 @@ function Tile({
     <Hexagon
       className={classNames({
         [Resources[resource].class]: true,
-        'in-shape': inShape,
+        highlighted: highlighted,
         building: building,
         [project.class]: building,
         [projectType.class]: building,

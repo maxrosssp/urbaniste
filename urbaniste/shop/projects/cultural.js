@@ -84,7 +84,6 @@ export default {
     ),
     victoryPoints: (state, _, positions) => getAllAdjacentTiles(state, positions).filter(tile => tile.resource === Resource.WATER).length
   },
-  //NEEDS STAGE
   [Building.GUILD_HALL]: {
     shape: Shape.TRIANGLE_6,
     cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 1, [Resource.LABOR]: 2 },

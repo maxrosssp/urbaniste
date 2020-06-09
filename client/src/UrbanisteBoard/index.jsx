@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Button, Navbar } from 'react-bootstrap';
 import Players from './components/Players';
 import Shop from './components/Shop';
@@ -12,6 +12,8 @@ function UrbanisteBoard({
   playerID,
   isActive
 }) {
+  const [selectedProjectName, setSelectedProjectName] = useState(null);
+
   const isTurn = ctx.currentPlayer === playerID;
   const stage = ctx.activePlayers === null ? 'expand' : ctx.activePlayers[playerID];
   const undoExpand = () => {
@@ -32,7 +34,13 @@ function UrbanisteBoard({
             </Col>
 
             <Col sm={12}>
-              <Shop G={G} stage={stage} moves={moves} events={events} isActive={isActive} playerId={playerID} />
+              <Shop
+                G={G}
+                playerId={playerID}
+                selectedProjectName={selectedProjectName}
+                onProjectSelect={setSelectedProjectName}
+                isBuildStage={stage === 'build'}
+              />
             </Col>
 
             <Col sm={12}>
@@ -49,7 +57,15 @@ function UrbanisteBoard({
         </Col>
 
         <Col className="col board-col" sm={7}>
-          <Board G={G} stage={stage} moves={moves} events={events} isActive={isActive} playerId={playerID} />
+          <Board
+            G={G}
+            stage={stage}
+            moves={moves}
+            events={events}
+            isActive={isActive}
+            playerId={playerID}
+            selectedProjectName={selectedProjectName}
+          />
         </Col>
       </Row>
     </Container>

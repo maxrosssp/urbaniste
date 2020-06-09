@@ -2,13 +2,13 @@ import {
   getPlayerBuildings
 } from '../utils';
 import {
-  getProject
+  getProjectConfig
 } from '../shop/projects';
 import {
   getVictoryPoints
 } from '../shop/selectors';
 
-const getPlayerVictoryPoints = (state, playerId) => getPlayerBuildings(state, playerId).reduce((total, { name, positions }) => total + getVictoryPoints(getProject(name), state, playerId, positions), 0);
+const getPlayerVictoryPoints = (state, playerId) => getPlayerBuildings(state, playerId).reduce((total, { name, positions }) => total + getVictoryPoints({ ...getProjectConfig(name), name }, state, playerId, positions), 0);
 
 export const getPlayers = (state, playerId) => [state.players[playerId]]
   .concat(Object.values(state.players).filter(player => player.id != playerId))
@@ -22,3 +22,5 @@ export const getPlayerResources = (state, playerId) => state.players[playerId].r
 export const getPlayerLastTake = (state, playerId) => ({ ...state.players[playerId].taken[0] });
 
 export const getEnemyPlayerId = (state, playerId) => Object.values(state.players).find(player => player.id != playerId).id;
+
+export const getEnemyResources = (state, playerId) => getPlayerResources(state, getEnemyPlayerId(state, playerId));

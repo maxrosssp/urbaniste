@@ -1,0 +1,33 @@
+.project-shape {
+  svg {
+    g {
+      fill: hsl(0, 0%, 91%);
+
+      .hexagon:hover,
+      .hexagon:hover text,
+      .highlighted > g.hexagon,
+      .highlighted > g.hexagon text {
+        fill-opacity: 0.6;
+      }
+      
+      text {
+        font-size: 3px;
+        fill: black;
+      }
+
+      polygon {
+        stroke: black;
+        stroke-width: 0.6px;
+      }
+    }
+    
+    path {
+      fill: none;
+      stroke: hsl(0, 0%, 91%);
+      stroke-width: 0.4em;
+      stroke-opacity: 0.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+}

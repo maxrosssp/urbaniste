@@ -15,6 +15,11 @@ import {
   canBuildProjectInPositions,
   getProject
 } from '../shop/selectors';
+import {
+  validateClaims,
+  validateWaterCount,
+  validateCenter
+} from '../shop/validation';
 
 const shapesAreEqual = (positionsA, positionsB) => positionsA.length === positionsB.length && !positionsA.some(positionA => !positionsB.some(positionB => positionsAreEqual(positionA, positionB)));
 const validatePositionsShape = (positions, shape) => positions.some(({ row, col }) => (ShapePositions[shape].some(shapePositions => shapesAreEqual(normalize({ row: row * -1, col: col * -1 }, positions), shapePositions))));
@@ -41,7 +46,9 @@ export const canBuildInPositions = (state, playerId, positions = [], projectName
     validateNoEnemyWatchtowerAdjacent(state, positionsOnBoard, playerId) &&
     validateNoAdjacentBuildingType(state, positionsOnBoard, Building.CATHEDRAL) &&
     canBuildProjectInPositions(project, state, playerId, positionsOnBoard) &&
-    project.validator(state, playerId, positionsOnBoard);
+    (!project.claims || validateClaims(state, positionsOnBoard, playerId, project.claims)) &&
+    (!project.center || validateCenter(state, positionsOnBoard, playerId, project.center)) &&
+    (!project.validator || project.validator(state, positionsOnBoard, playerId));
 };
 
 const shapeRotations = {};

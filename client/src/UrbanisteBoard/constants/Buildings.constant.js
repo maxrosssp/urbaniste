@@ -236,5 +236,11 @@ export default {
     label: 'Opéra Garnier',
     class: 'opera-garnier',
     type: ProjectTypes[ProjectType.CULTURAL]
+  },
+  [Building.GRAND_CANAL]: {
+    name: Building.GRAND_CANAL,
+    label: 'Grand Canal',
+    class: 'grand-canal',
+    type: ProjectTypes[ProjectType.CULTURAL]
   }
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Table } from 'react-bootstrap';
+import { Table, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Resource } from '../../../../../urbaniste/constants';
 import Resources from '../../constants/Resources.constant';
 import ProjectTypes from '../../constants/ProjectTypes.constant';
 import Buildings from '../../constants/Buildings.constant';
-import { getProjects } from '../../../../../urbaniste/shop/selectors';
+import ProjectShape from './ProjectShape';
 import './Shop.scss';
 
 function Shop({
@@ -15,6 +15,17 @@ function Shop({
   isBuildStage
 }) {
   const onRowClick = (projectName) => isBuildStage && onProjectSelect(projectName === selectedProjectName ? null : projectName);
+  const popovers = projects.reduce((projectPopovers, project) => ({ ...projectPopovers, [project.name]: (
+    <Popover className={classNames('project-info', Buildings[project.name].class)} id="project-info-popover">
+      <Popover.Title as="h3">{Buildings[project.name].label}</Popover.Title>
+
+      <Popover.Content>
+        <p>{Buildings[project.name].label.description}</p>
+
+        <ProjectShape projectName={project.name} />
+      </Popover.Content>
+    </Popover>
+  )}), {});
 
   return (
     <Table className="shop" striped borderless hover responsive size="sm">
@@ -33,7 +44,11 @@ function Shop({
       <tbody>
         {projects.map(project => (
           <tr key={project.name} onClick={() => onRowClick(project.name)}>
-            <td className={classNames({ 'can-build': isBuildStage && project.canBuild, selected: selectedProjectName === project.name })}>{Buildings[project.name].label}</td>
+            <OverlayTrigger placement="bottom" overlay={popovers[project.name]}>
+              <td className={classNames({ 'can-build': isBuildStage && project.canBuild, selected: selectedProjectName === project.name })}>
+                {Buildings[project.name].label}
+              </td>
+            </OverlayTrigger>
             <td className={ProjectTypes[project.type].class}>{ProjectTypes[project.type].label}</td>
             <td className={`${Resources[Resource.BUILDING_MATERIAL].class} text-center`}>{project[Resource.BUILDING_MATERIAL] || 0}</td>
             <td className={`${Resources[Resource.COIN].class} text-center`}>{project[Resource.COIN] || 0}</td>

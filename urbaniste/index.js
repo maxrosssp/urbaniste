@@ -173,9 +173,6 @@ export const Urbaniste = {
     }
   },
   endIf: (G, ctx) => {
-
-  },
-  endIf: (G, ctx) => {
     const playersWithMovesLeft = ctx.playOrder.filter(playerId => canPlayerExpand(G, playerId) ||
       getProjects(G, playerId).some(project => project.canBuild));
 

@@ -1,7 +1,8 @@
 import {
   Shape,
   Resource,
-  Building
+  Building,
+  Stage
 } from '../../constants.js';
 
 export default {
@@ -32,7 +33,8 @@ export default {
     claims: { friendly: 2 },
     cost: { [Resource.BUILDING_MATERIAL]: 3, [Resource.COIN]: 1, [Resource.LABOR]: 1 },
     available: 5,
-    victoryPoints: 2
+    victoryPoints: 2,
+    getNextStage: () => Stage.REPLACE
   },
   [Building.SEWERS]: {
     shape: Shape.LINE_3,

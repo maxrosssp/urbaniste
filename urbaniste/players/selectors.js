@@ -8,7 +8,7 @@ import {
   getVictoryPoints
 } from '../shop/selectors';
 
-const getPlayerVictoryPoints = (state, playerId) => getPlayerBuildings(state, playerId).reduce((total, { name, positions }) => total + getVictoryPoints({ ...getProjectConfig(name), name }, state, playerId, positions), 0);
+export const getPlayerVictoryPoints = (state, playerId) => getPlayerBuildings(state, playerId).reduce((total, { name, positions }) => total + getVictoryPoints({ ...getProjectConfig(name), name }, state, playerId, positions), 0);
 
 export const getPlayers = (state, playerId) => [state.players[playerId]]
   .concat(Object.values(state.players).filter(player => player.id != playerId))

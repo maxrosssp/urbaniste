@@ -1,7 +1,8 @@
 import {
   Shape,
   Resource,
-  Building
+  Building,
+  Stage
 } from '../../constants.js';
 import {
   getTiles,
@@ -85,7 +86,8 @@ export default {
     claims: { friendly: 6 },
     cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 1, [Resource.LABOR]: 2 },
     available: 1,
-    victoryPoints: (state, positions) => getAllAdjacentTiles(state, positions).filter(tile => tile.resource === state.misc.guildResource).length
+    victoryPoints: (state, positions) => getAllAdjacentTiles(state, positions).filter(tile => tile.resource === state.misc.guildResource).length,
+    getNextStage: () => Stage.SET_GUILD
   },
   [Building.LE_HAVRE]: {
     shape: Shape.Y,

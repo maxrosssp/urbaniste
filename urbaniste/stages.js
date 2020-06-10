@@ -1,5 +1,4 @@
 import { Stage, Resource } from './constants';
-import Resources from '../client/src/UrbanisteBoard/constants/Resources.constant';
 import {
   getPositionsForShapeAtPosition
 } from './tiles/selectors';
@@ -37,6 +36,7 @@ const Stages = {
       canAct: true,
       onTileClick: ({ TakeTile }, positionsToBuild) => TakeTile(positionsToBuild[0])
     }),
+    displayMessage: () => 'Place a marker to expand your control. Valid locations are highlighted in green.',
     buttons: ['endTurn']
   },
   [Stage.BUILD]: {
@@ -55,6 +55,9 @@ const Stages = {
         onTileClick: ({ BuildProject }, positionsToBuild, projectName, valuesToInclude) => BuildProject(projectName, positionsToBuild, valuesToInclude)
       };
     },
+    displayMessage: (projectName) => projectName ?
+      'Use the arrow keys to rotate the project blueprint. Valid build locations are highlighted in green.' :
+      'Select a structure to build, or end your turn. (Projects you are able to build are highlighted in yellow.)',
     buttons: ['undoExpand', 'endTurn']
   },
   [Stage.FERRY]: {
@@ -65,6 +68,7 @@ const Stages = {
       canAct: true,
       onTileClick: ({ Ferry }, positionsToBuild) => Ferry(positionsToBuild[0])
     }),
+    displayMessage: () => 'Place a marker adjacent to the body of water that the ferry is touching.',
     buttons: ['endTurn']
   },
   [Stage.REPLACE]: {
@@ -75,6 +79,7 @@ const Stages = {
       canAct: true,
       onTileClick: ({ ReplaceEnemy }, positionsToBuild) => ReplaceEnemy(positionsToBuild[0])
     }),
+    displayMessage: () => 'Select an enemy marker within two tiles of the monument to replace with one of yours.',
     buttons: ['endTurn']
   },
   [Stage.TUNNEL]: {
@@ -85,6 +90,7 @@ const Stages = {
       canAct: true,
       onTileClick: ({ Tunnel }, positionsToBuild) => Tunnel(positionsToBuild[0])
     }),
+    displayMessage: () => 'Place a marker adjacent to the enemy structure that the tunnel is touching.',
     buttons: ['endTurn']
   },
   [Stage.TRAM]: {
@@ -103,6 +109,7 @@ const Stages = {
         }
       };
     },
+    displayMessage: () => 'Drag and drop a friendly or enemy marker adjacent to the tramway to an unclaimed tile also adjacent to the tramway.',
     buttons: ['endTurn']
   },
   [Stage.STING]: {
@@ -113,6 +120,7 @@ const Stages = {
       canAct: true,
       onTileClick: ({ Arrest }, positionsToBuild) => Arrest(positionsToBuild[0])
     }),
+    displayMessage: () => 'For each of the prisons you control, select an adjacent friendly or enemy marker to remove.',
     buttons: ['endTurn']
   },
   [Stage.STEAL]: {
@@ -122,7 +130,7 @@ const Stages = {
       return {
         title: 'Steal Resources',
         description: [
-          "Steal up to two enemy resources."
+          'Steal up to two enemy resources.'
         ],
         buttonText: 'Steal',
         resources: enemyResources,
@@ -130,7 +138,8 @@ const Stages = {
         canCancel: false,
         onClose: ({ StealResources }, resources) => StealResources(resources)
       };
-    }
+    },
+    displayMessage: () => 'Steal up to two enemy resources.'
   },
   [Stage.LOAN]: {
     stageName: Stage.LOAN,
@@ -141,7 +150,8 @@ const Stages = {
       ],
       canCancel: false,
       onClose: ({ RecieveLoan }, resourceType) => RecieveLoan(resourceType)
-    })
+    }),
+    displayMessage: () => 'Select a resource for your loan.'
   },
   [Stage.SET_GUILD]: {
     stageName: Stage.SET_GUILD,
@@ -152,7 +162,8 @@ const Stages = {
       ],
       canCancel: false,
       onClose: ({ SetGuildPoints }, resourceType) => SetGuildPoints(resourceType)
-    })
+    }),
+    displayMessage: () => 'Select a resource for your guild.'
   }
 };
 

@@ -10,6 +10,7 @@ import { Stage } from '../../../urbaniste/constants';
 import { getStage } from '../../../urbaniste/stages';
 import { getProjects } from '../../../urbaniste/shop/selectors';
 import { getTiles } from '../../../urbaniste/tiles/selectors';
+import { canPlayerExpand } from '../../../urbaniste/tiles/validation';
 
 function UrbanisteBoard({
   G,
@@ -24,7 +25,8 @@ function UrbanisteBoard({
     getBoardState,
     getResourcesModal,
     getResourceSelectModal,
-    buttons
+    buttons,
+    displayMessage
   } = getStage(ctx.activePlayers !== null && ctx.activePlayers[playerID]) || {};
   const isTurn = ctx.currentPlayer === playerID;
 
@@ -42,8 +44,15 @@ function UrbanisteBoard({
   }, [positionUnderMouse, rotation]);
 
   useEffect(() => {
-    setProjects(getProjects(G, playerID));
+    const currentProjects = getProjects(G, playerID);
+    setProjects(currentProjects);
     setTiles(getTiles(G));
+
+    if (stageName === Stage.EXPAND && !canPlayerExpand(G, ctx.currentPlayer)) {
+      events.endStage();
+    } else if (stageName === Stage.BUILD && !currentProjects.some(project => project.canBuild)) {
+      events.endTurn();
+    }
   }, [ctx]);
 
   useEffect(() => {
@@ -83,7 +92,13 @@ function UrbanisteBoard({
             </Col>
 
             <Col sm={12}>
-              <div className="message-prompt">{isTurn ? 'Your Turn' : 'Waiting for opponent.'}</div>
+              <div className="message-prompt">
+                {!ctx.gameover && (isTurn ? ((displayMessage && displayMessage(selectedProjectName)) || 'Your Turn') : 'Waiting for opponent.')}
+                {ctx.gameover && (ctx.gameover.winners.length === 1 ?
+                  (ctx.gameover.winners.indexOf(playerID) !== -1 ? 'Game Over. You won!' : 'Game Over. You lost.') :
+                  'Game over. Draw.')
+                }
+              </div>
             </Col>
 
             {isTurn && buttons && (

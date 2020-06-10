@@ -102,7 +102,7 @@ function ResourcesModal({
 
       <Modal.Body>
         {description && (
-          <p>{description.map(line => <>{line}<br/></>)}</p>
+          <p className="description">{description.map((line, index) => <span key={'line-' + (index + 1)}>{line}<br/></span>)}</p>
         )}
 
         <Form>

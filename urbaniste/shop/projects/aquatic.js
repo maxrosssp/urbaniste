@@ -1,7 +1,8 @@
 import {
   Shape,
   Resource,
-  Building
+  Building,
+  Stage
 } from '../../constants.js';
 import {
   getAllAdjacentTiles
@@ -45,7 +46,8 @@ export default {
     validator: (state, positions) => (
       getAllAdjacentTiles(state, positions).some(tile => tile.resource === Resource.WATER)
     ),
-    victoryPoints: 3
+    victoryPoints: 3,
+    getNextStage: () => Stage.FERRY
   },
   [Building.LIGHTHOUSE]: {
     shape: Shape.SINGLE,

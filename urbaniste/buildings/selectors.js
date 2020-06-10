@@ -12,6 +12,11 @@ import {
 
 export const getPlayerBuildingsOfType = (state, playerId, type) => state.buildings.filter(building => building.owner === playerId && building.name === type);
 
+export const getLastPlayerBuildingBuilt = (state, playerId) => {
+  const playerBuildings = state.buildings.filter(building => building.owner === playerId);
+  return playerBuildings[playerBuildings.length - 1];
+}
+
 export const getLastPlayerBuildingBuiltOfType = (state, playerId, type) => {
   const buildingsOfType = getPlayerBuildingsOfType(state, playerId, type);
   return buildingsOfType[buildingsOfType.length - 1];
@@ -20,7 +25,7 @@ export const getLastPlayerBuildingBuiltOfType = (state, playerId, type) => {
 export const getLastFerryValidLandingPositions = (state, playerId) => getAllAdjacentTiles(state,
   getAllAdjacentTiles(state, getLastPlayerBuildingBuiltOfType(state, playerId, Building.FERRY).positions)
     .filter(tile => tile.resource === Resource.WATER).map(tile => tile.position))
-    .filter(tile => !tile.owner).map(tile => tile.position);
+    .filter(tile => !tile.owner && tile.resource !== Resource.WATER).map(tile => tile.position);
 
 export const getLastMonumentValidReplacePositions = (state, playerId) => {
   const lastMonumentPositions = getLastPlayerBuildingBuiltOfType(state, playerId, Building.MONUMENT).positions;

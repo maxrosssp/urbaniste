@@ -27,22 +27,22 @@ function ResourceSelectModal({
 
       <Modal.Body>
         {description && (
-          <p>{description.map(line => <>{line}<br/></>)}</p>
+          <p className="description">{description.map((line, index) => <span key={'line-' + (index + 1)}>{line}<br/></span>)}</p>
         )}
         
-        <div class="resource-button">
+        <div className="resource-button">
           <Button variant="primary" onClick={() => onClose(moves, Resource.BUILDING_MATERIAL)}>
             {Resources[Resource.BUILDING_MATERIAL].label}
           </Button>
         </div>
 
-        <div class="resource-button">
+        <div className="resource-button">
           <Button variant="primary" onClick={() => onClose(moves, Resource.COIN)}>
             {Resources[Resource.COIN].label}
           </Button>
         </div>
 
-        <div class="resource-button">
+        <div className="resource-button">
           <Button variant="primary" onClick={() => onClose(moves, Resource.LABOR)}>
             {Resources[Resource.LABOR].label}
           </Button>

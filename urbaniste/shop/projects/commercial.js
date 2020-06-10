@@ -1,11 +1,13 @@
 import {
   Shape,
   Resource,
-  Building
+  Building,
+  Stage
 } from '../../constants.js';
 import {
   getPlayerBuildingsOfType,
-  getAllAdjacentBuildings
+  getAllAdjacentBuildings,
+  getAllAdjacentTiles
 } from '../../utils';
 
 export default {
@@ -47,13 +49,19 @@ export default {
     claims: { friendly: 3 },
     cost: { [Resource.ANY]: 2 },
     available: 5,
-    victoryPoints: -1
+    victoryPoints: -1,
+    getNextStage: () => Stage.LOAN
   },
   [Building.CASINO]: {
     shape: Shape.TRIANGLE_3,
     claims: { friendly: 3 },
     cost: { [Resource.ANY]: 4 },
     available: 5,
-    victoryPoints: 0
+    victoryPoints: 0,
+    getNextStage: (state, playerId, positions) => {
+      if (getAllAdjacentTiles(state, positions).some(tile => tile.owner && tile.owner !== playerId)) {
+        return Stage.STEAL;
+      }
+    }
   }
 };

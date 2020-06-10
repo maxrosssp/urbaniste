@@ -1,7 +1,8 @@
 import {
   Shape,
   Resource,
-  Building
+  Building,
+  Stage
 } from '../../constants.js';
 import {
   getAllAdjacentBuildings
@@ -21,14 +22,16 @@ export default {
     claims: { friendly: 2 },
     cost: { [Resource.LABOR]: 3 },
     available: 5,
-    victoryPoints: 1
+    victoryPoints: 1,
+    getNextStage: () => Stage.EXPAND
   },
   [Building.PRISON]: {
     shape: Shape.LINE_2,
     claims: { friendly: 2 },
     cost: { [Resource.COIN]: 2, [Resource.LABOR]: 2 },
     available: 5,
-    victoryPoints: 2
+    victoryPoints: 2,
+    getNextStage: () => Stage.STING
   },
   [Building.TUNNEL]: {
     shape: Shape.SINGLE,
@@ -38,13 +41,15 @@ export default {
     validator: (state, positions, playerId) => (
       getAllAdjacentBuildings(state, positions).filter(building => building.owner !== playerId).length === 1
     ),
-    victoryPoints: 3
+    victoryPoints: 3,
+    getNextStage: () => Stage.TUNNEL
   },
   [Building.TRAMWAY]: {
     shape: Shape.LINE_3,
     claims: { friendly: 3 },
     cost: { [Resource.BUILDING_MATERIAL]: 3 },
     available: 5,
-    victoryPoints: 2
+    victoryPoints: 2,
+    getNextStage: () => Stage.TRAM
   }
 };

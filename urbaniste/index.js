@@ -1,14 +1,15 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
 import moves from './moves';
-import { Resource, Building, Stage } from './constants';
+import { Resource, Stage } from './constants';
 import {
+  canPlayerExpand,
   canTakeTileAtPosition
 } from './tiles/validation';
 import {
   canBuildInPositions
 } from './buildings/validation';
 import {
-  getPlayerBuildingsOfType,
+  getLastPlayerBuildingBuilt,
   getLastFerryValidLandingPositions,
   getLastMonumentValidReplacePositions,
   getLastTunnelValidLandingPositions,
@@ -19,61 +20,35 @@ import {
   isStingComplete
 } from './misc/selectors';
 import {
-  isPositionInList,
-  getAllAdjacentTiles
+  getProjects
+} from './shop/selectors';
+import {
+  getPlayerVictoryPoints
+} from './players/selectors';
+import {
+  getProjectConfig
+} from './shop/projects';
+import {
+  isPositionInList
 } from './utils';
 
 const getPlayerConfigs = (playerCount) => [...Array(playerCount).keys()].map(id => ({ id: id + '', name: 'Player ' + (id + 1) }));
 
 const TakeTile = (G, ctx, position) => {
   if (canTakeTileAtPosition(G, ctx.currentPlayer, position)) {
-    ctx.events.setActivePlayers({ currentPlayer: Stage.BUILD, moveLimit: 1 });
     return moves.take(G, ctx.currentPlayer, position);
   }
   return INVALID_MOVE;
 };
 const UndoTakeTile = {
   move: (G, ctx) => {
-    ctx.events.setActivePlayers({ currentPlayer: Stage.EXPAND, moveLimit: 1 });
+    ctx.events.setActivePlayers({ currentPlayer: Stage.EXPAND });
     return moves.undoTake(G, ctx.currentPlayer);
   },
   noLimit: true
 };
 const BuildProject = (G, ctx, projectName, positions, resources) => {
   if (canBuildInPositions(G, ctx.currentPlayer, positions, projectName)) {
-    switch (projectName) {
-      case Building.CASINO:
-        if (getAllAdjacentTiles(G, positions).some(tile => tile.owner !== ctx.currentPlayer)) {
-          ctx.events.setActivePlayers({ currentPlayer: Stage.STEAL, moveLimit: 1 });
-        }
-        break;
-      case Building.FERRY:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.FERRY, moveLimit: 1 });
-        break;
-      case Building.MONUMENT:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.REPLACE, moveLimit: 1 });
-        break;
-      case Building.PLAZA:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.EXPAND, moveLimit: 1 });
-        break;
-      case Building.LOAN_OFFICE:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.LOAN, moveLimit: 1 });
-        break;
-      case Building.GUILD_HALL:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.SET_GUILD, moveLimit: 1 });
-        break;
-      case Building.PRISON:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.STING, moveLimit: 1 });
-        break;
-      case Building.TUNNEL:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.TUNNEL, moveLimit: 1 });
-        break;
-      case Building.TRAMWAY:
-        ctx.events.setActivePlayers({ currentPlayer: Stage.TRAM, moveLimit: 1 });
-        break;
-      default:
-        ctx.events.endTurn();
-    }
     return moves.build(G, ctx.currentPlayer, projectName, positions, resources);
   }
   return INVALID_MOVE;
@@ -83,26 +58,22 @@ const EndTurn = {
   noLimit: true
 };
 const StealResources = (G, ctx, resources) => {
-  ctx.events.endTurn();
   return moves.steal(G, ctx.currentPlayer, resources);
 };
 const Ferry = (G, ctx, position) => {
   if (isPositionInList(position, getLastFerryValidLandingPositions(G, ctx.currentPlayer))) {
-    ctx.events.endTurn();
     return moves.take(G, ctx.currentPlayer, position);
   }
   return INVALID_MOVE;
 };
 const ReplaceEnemy = (G, ctx, position) => {
   if (isPositionInList(position, getLastMonumentValidReplacePositions(G, ctx.currentPlayer))) {
-    ctx.events.endTurn();
     return moves.setOwner(G, ctx.currentPlayer, position);
   }
   return INVALID_MOVE;
 };
 const Tunnel = (G, ctx, position) => {
   if (isPositionInList(position, getLastTunnelValidLandingPositions(G, ctx.currentPlayer))) {
-    ctx.events.endTurn();
     return moves.setOwner(G, ctx.currentPlayer, position);
   }
   return INVALID_MOVE;
@@ -111,25 +82,21 @@ const Tram = (G, ctx, fromPosition, toPosition) => {
   const tramwayAdjacentTiles = getLastTramwayAdjacentTiles(G, ctx.currentPlayer);
   if (isPositionInList(fromPosition, tramwayAdjacentTiles.filter(tile => tile.owner && !tile.building).map(tile => tile.position)) 
       && isPositionInList(toPosition, tramwayAdjacentTiles.filter(tile => !tile.owner).map(tile => tile.position))) {
-    ctx.events.endTurn();
     return moves.moveTile(G, fromPosition, toPosition);
   }
   return INVALID_MOVE;
 };
 const RecieveLoan = (G, ctx, resourceType) => {
   if ([Resource.BUILDING_MATERIAL, Resource.COIN, Resource.LABOR].indexOf(resourceType) !== -1) {
-    ctx.events.endTurn();
     return moves.addResources(G, ctx.currentPlayer, { [resourceType]: 3 });
   }
   return INVALID_MOVE;
 };
 const SetGuildPoints = (G, ctx, resourceType) => {
-  ctx.events.endTurn();
   return moves.setGuildPoints(G, ctx.currentPlayer, resourceType);
 };
 const Arrest = (G, ctx, position) => {
   if (isPositionInList(position, getStingRemainingOptions(G))) {
-    ctx.events.setActivePlayers({ currentPlayer: Stage.STING, moveLimit: 3 + getPlayerBuildingsOfType(G, ctx.currentPlayer, Building.PRISON).length });
     return moves.arrest(G, position);
   }
   return INVALID_MOVE;
@@ -139,20 +106,41 @@ export const Urbaniste = {
   name: 'Urbaniste',
   setup: (ctx, setupData = {}) => moves.initialize(setupData.name, getPlayerConfigs(ctx.numPlayers), setupData.boardConfig, setupData.shopConfig),
   turn: {
-    activePlayers: { currentPlayer: Stage.EXPAND, moveLimit: 1 },
+    activePlayers: { currentPlayer: Stage.EXPAND },
     endIf: (G, ctx) => {
       const stage = ctx.activePlayers && ctx.activePlayers[ctx.currentPlayer];
+      if (stage === Stage.EXPAND) {
+        return !getProjects(G, ctx.currentPlayer).some(project => project.canBuild);
+      }
       if (stage === Stage.STING) {
         return isStingComplete(G);
       }
+      if (stage === Stage.BUILD) {
+        return false;
+      }
+      return true;
     },
-    onEnd: (G, ctx) => ctx.events.setActivePlayers({ currentPlayer: Stage.EXPAND, moveLimit: 1 }),
+    onMove: (G, ctx) => {
+      const stage = ctx.activePlayers && ctx.activePlayers[ctx.currentPlayer];
+      if (stage === Stage.EXPAND) {
+        ctx.events.endStage();
+      } else if (stage === Stage.BUILD) {
+        if (ctx._activePlayersNumMoves[ctx.currentPlayer] === 1) {
+          const lastBuildingBuilt = getLastPlayerBuildingBuilt(G, ctx.currentPlayer);
+          if (lastBuildingBuilt) {
+            const { name, positions } = lastBuildingBuilt;
+            const { getNextStage } = getProjectConfig(name);
+            const nextStage = getNextStage && getNextStage(G, ctx.currentPlayer, positions);
+            nextStage ? ctx.events.setStage(nextStage) : ctx.events.endTurn();
+          } else {
+            ctx.events.endTurn();
+          }
+        }
+      }
+    },
     stages: {
       [Stage.EXPAND]: {
-        moves: {
-          TakeTile,
-          EndTurn
-        },
+        moves: { TakeTile, EndTurn },
         next: Stage.BUILD
       },
       [Stage.BUILD]: {
@@ -182,6 +170,29 @@ export const Urbaniste = {
       [Stage.TRAM]: {
         moves: { Tram, EndTurn }
       }
+    }
+  },
+  endIf: (G, ctx) => {
+
+  },
+  endIf: (G, ctx) => {
+    const playersWithMovesLeft = ctx.playOrder.filter(playerId => canPlayerExpand(G, playerId) ||
+      getProjects(G, playerId).some(project => project.canBuild));
+
+    if (playersWithMovesLeft.length === 0) {
+      var highestScore = 0;
+      var winners = [];
+      ctx.playOrder.forEach(playerId => {
+        const score = getPlayerVictoryPoints(G, playerId);
+        if (score > highestScore) {
+          highestScore = score;
+          winners = [playerId];
+        } else if (score === highestScore) {
+          winners = winners.concat(playerId);
+        }
+      });
+
+      return { winners };
     }
   },
   minPlayers: 2,

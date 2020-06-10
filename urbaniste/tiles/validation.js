@@ -10,6 +10,9 @@ import {
   inViewOfPlayerLighthouse,
   validateNoEnemyWatchtowerAdjacent
 } from '../buildings/validation';
+import {
+  getTiles
+} from './selectors';
 
 const getTileIfExists = (state, position) => {
   return position && getTile(state, position);
@@ -37,3 +40,7 @@ export const canTakeTileAtPosition = (state, playerId, position) => (
     inViewOfPlayerLighthouse(state, playerId, position)
   ) && validateNoEnemyWatchtowerAdjacent(state, [position], playerId)
 );
+
+export const canPlayerExpand = (state, playerId) => getTiles(state)
+  .filter(tile => !tile.owner && tile.resource !== Resource.WATER)
+  .some(tile => canTakeTileAtPosition(state, playerId, tile.position));

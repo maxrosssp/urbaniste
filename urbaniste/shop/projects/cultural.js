@@ -131,7 +131,7 @@ export default {
     shape: Shape.V3,
     claims: { friendly: 3 },
     cost: { [Resource.BUILDING_MATERIAL]: 2, [Resource.COIN]: 3 },
-    available: 5,
+    available: 1,
     validator: (state, positions) => (
       validateNoAdjacentBuildingType(state, positions, Building.MARINA) &&
       getTilesAdjacentToAll(state, positions)[0].resource === Resource.WATER

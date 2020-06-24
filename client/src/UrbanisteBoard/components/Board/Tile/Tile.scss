@@ -46,6 +46,20 @@
   @include project-colors(fill, $first: true, $prefix: '.building.enemy');
 }
 
+.first .mine svg circle,
+.second .enemy svg circle {
+  fill: $first-player-main;
+}
+
+.first .enemy svg circle,
+.second .mine svg circle {
+  fill: $second-player-main;
+}
+
+.hexagon-group svg {
+  overflow: visible;
+}
+
 
 svg {
   g {

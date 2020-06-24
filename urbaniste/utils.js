@@ -127,3 +127,16 @@ export const getResourceSelectionValues = (validSelections, resources, selection
     }
   };
 };
+
+const getAllPossibleOptionsForSizeAndTotal = (size, total) => {
+  if (size === 0) return [];
+  if (size === 1) return [total];
+  if (total === 0) return [[...Array(size).keys()].map(() => 0)];
+  return [...Array(total + 1).keys()].reduce((options, firstNum) => options.concat(getAllPossibleOptionsForSizeAndTotal(size - 1, total - firstNum).map(option => [firstNum].concat(option))), []);
+}
+
+const getAllPossibleOptionsForSizeAndMax = (size, max) => [...Array(max + 1).keys()].reduce((possibleOptions, total) => possibleOptions.concat(getAllPossibleOptionsForSizeAndTotal(size, total)), []);
+
+const getAllResourceOptions = (max) => getAllPossibleOptionsForSizeAndMax(3, max).map(([ bm, coin, labor ]) => ({ [Resource.BUILDING_MATERIAL]: bm, [Resource.COIN]: coin, [Resource.LABOR]: labor }));
+
+export const getAllValidStealOptions = (enemyResources, max) => getAllResourceOptions(max).filter(resourceOption => canAffordSelection(resourceOption, enemyResources));

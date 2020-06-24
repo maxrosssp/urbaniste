@@ -6,14 +6,29 @@ table.shop.table {
     color: black;
   }
 
+  td.can-build,
+  td.selected {
+    color: black;
+
+    svg path {
+      fill: black;
+    }
+  }
+
   td.can-build {
     background-color: $can-build-project;
-    color: black;
   }
 
   td.selected {
     background-color: $selected-project;
-    color: black;
+  }
+
+  svg {
+    margin-left: 1px;
+
+    path {
+      fill: #e0e0e0;
+    }
   }
 }
 

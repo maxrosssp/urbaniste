@@ -1,6 +1,7 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
 import moves from './moves';
-import { Resource, Stage } from './constants';
+import { Resource, Stage, Move } from './constants';
+import { getStage } from './stages';
 import {
   canPlayerExpand,
   canTakeTileAtPosition
@@ -14,7 +15,7 @@ import {
   getLastMonumentValidReplacePositions,
   getLastTunnelValidLandingPositions,
   getLastTramwayAdjacentTiles,
-  getStingRemainingOptions
+  getStingRemainingPositionOptions
 } from './buildings/selectors';
 import {
   isStingComplete
@@ -96,7 +97,7 @@ const SetGuildPoints = (G, ctx, resourceType) => {
   return moves.setGuildPoints(G, ctx.currentPlayer, resourceType);
 };
 const Arrest = (G, ctx, position) => {
-  if (isPositionInList(position, getStingRemainingOptions(G))) {
+  if (isPositionInList(position, getStingRemainingPositionOptions(G))) {
     return moves.arrest(G, position);
   }
   return INVALID_MOVE;
@@ -140,35 +141,63 @@ export const Urbaniste = {
     },
     stages: {
       [Stage.EXPAND]: {
-        moves: { TakeTile, EndTurn },
+        moves: { 
+          [Move.TAKE_TILE]: TakeTile, 
+          [Move.END_TURN]: EndTurn 
+        },
         next: Stage.BUILD
       },
       [Stage.BUILD]: {
-        moves: { UndoTakeTile, BuildProject, EndTurn }
+        moves: { 
+          [Move.UNDO_TAKE_TILE]: UndoTakeTile, 
+          [Move.BUILD_PROJECT]: BuildProject, 
+          [Move.END_TURN]: EndTurn 
+        }
       },
       [Stage.STEAL]: {
-        moves: { StealResources }
+        moves: { 
+          [Move.STEAL_RESOURCES]: StealResources 
+        }
       },
       [Stage.FERRY]: {
-        moves: { Ferry, EndTurn }
+        moves: { 
+          [Move.FERRY]: Ferry, 
+          [Move.END_TURN]: EndTurn 
+        }
       },
       [Stage.REPLACE]: {
-        moves: { ReplaceEnemy, EndTurn }
+        moves: { 
+          [Move.REPLACE_ENEMY]: ReplaceEnemy, 
+          [Move.END_TURN]: EndTurn 
+        }
       },
       [Stage.LOAN]: {
-        moves: { RecieveLoan }
+        moves: { 
+          [Move.RECIEVE_LOAN]: RecieveLoan 
+        }
       },
       [Stage.SET_GUILD]: {
-        moves: { SetGuildPoints }
+        moves: { 
+          [Move.SET_GUILD_POINTS]: SetGuildPoints 
+        }
       },
       [Stage.STING]: {
-        moves: { Arrest, EndTurn }
+        moves: { 
+          [Move.ARREST]: Arrest, 
+          [Move.END_TURN]: EndTurn 
+        }
       },
       [Stage.TUNNEL]: {
-        moves: { Tunnel, EndTurn }
+        moves: { 
+          [Move.TUNNEL]: Tunnel, 
+          [Move.END_TURN]: EndTurn 
+        }
       },
       [Stage.TRAM]: {
-        moves: { Tram, EndTurn }
+        moves: { 
+          [Move.TRAM]: Tram, 
+          [Move.END_TURN]: EndTurn 
+        }
       }
     }
   },
@@ -192,6 +221,12 @@ export const Urbaniste = {
       return { winners };
     }
   },
-  minPlayers: 2,
-  maxPlayers: 2
+  minPlayers: 1,
+  maxPlayers: 2,
+  ai: {
+    enumerate: (G, ctx) => {
+      const stage = ctx.activePlayers && getStage(ctx.activePlayers[ctx.currentPlayer]);
+      return (stage && stage.getPossibleMoves) ? stage.getPossibleMoves(G, ctx.currentPlayer) : [{ move: Move.END_TURN }];
+    }
+  }
 };

@@ -238,6 +238,21 @@ const Stage = {
   TRAM: 'TRAM'
 };
 
+const Move = {
+  TAKE_TILE: 'TAKE_TILE',
+  END_TURN: 'END_TURN',
+  UNDO_TAKE_TILE: 'UNDO_TAKE_TILE',
+  BUILD_PROJECT: 'BUILD_PROJECT',
+  STEAL_RESOURCES: 'STEAL_RESOURCES',
+  FERRY: 'FERRY',
+  REPLACE_ENEMY: 'REPLACE_ENEMY',
+  RECIEVE_LOAN: 'RECIEVE_LOAN',
+  SET_GUILD_POINTS: 'SET_GUILD_POINTS',
+  ARREST: 'ARREST',
+  TUNNEL: 'TUNNEL',
+  TRAM: 'TRAM'
+};
+
 export {
   Resource,
   ProjectType,
@@ -249,5 +264,6 @@ export {
   Directions,
   DefaultShopProjectTypes,
   ShapePositions,
-  Stage
+  Stage,
+  Move
 };

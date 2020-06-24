@@ -6,7 +6,7 @@ import Shop from './components/Shop';
 import Board from './components/Board';
 import ResourcesModal from './components/ResourcesModal';
 import ResourceSelectModal from './components/ResourceSelectModal';
-import { Stage } from '../../../urbaniste/constants';
+import { Stage, Move } from '../../../urbaniste/constants';
 import { getStage } from '../../../urbaniste/stages';
 import { getProjects } from '../../../urbaniste/shop/selectors';
 import { getTiles } from '../../../urbaniste/tiles/selectors';
@@ -59,10 +59,6 @@ function UrbanisteBoard({
     setSelectedProjectName(null);
   }, [stageName]);
 
-  const undoExpand = () => {
-    moves.UndoTakeTile();
-  };
-
   if (!playerID) {
     return <></>;
   }
@@ -103,8 +99,8 @@ function UrbanisteBoard({
 
             {isTurn && buttons && (
               <Col sm={12} className="move-buttons">
-                {buttons.indexOf('undoExpand') !== -1 && <Button type="button" onClick={undoExpand}>Undo</Button>}
-                {buttons.indexOf('endTurn') !== -1 && <Button type="button" onClick={() => moves.EndTurn()}>End Turn</Button>}
+                {buttons.indexOf('undoExpand') !== -1 && <Button type="button" onClick={() => moves[Move.UNDO_TAKE_TILE]()}>Undo</Button>}
+                {buttons.indexOf('endTurn') !== -1 && <Button type="button" onClick={() => moves[Move.END_TURN]()}>End Turn</Button>}
               </Col>
             )}
           </Row>

@@ -21,16 +21,13 @@ function Tile({
   const projectType = project.type || {};
   const { canDrag, canDrop, onDrop } = drag || {};
 
-  const onDragStart = (event, source) => {
-  };
-
-  const onDragEnd = (event, source, success) => {
+  const onDragEnd = (_, __, success) => {
     if (!drag || !canDrag() || !success) {
       return;
     }
   };
 
-  const onDropTile = (event, source, target) => {
+  const onDropTile = (_, source, target) => {
     onDrop(moves, { ...target.data.position }, { row: source.props.r, col: source.props.q });
   }
 
@@ -59,12 +56,16 @@ function Tile({
       onKeyDown={onKeyDown}
       data={tile}
       draggable={canDrag && canDrag()}
-      onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       onDrop={onDropTile}
       onDragOver={onDragOver}
     >
-      {owner && <Text>{owner === playerId ? 'Mine' : 'Enemy'}</Text>}
+      {owner && (
+        <svg viewBox="1 1 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="1" cy="1" r="2" />
+        </svg>
+      )}
+      {building && <Text>{project.shortLabel || project.label}</Text>}
     </Hexagon>
   );
 }

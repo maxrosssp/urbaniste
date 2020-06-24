@@ -32,8 +32,15 @@ function Board({
   const [toInclude, setToInclude] = useState(null);
 
   const isHighlighted = (position) => positionsToBuild.some(positionToHilight => positionsAreEqual(positionToHilight, position));
-  const onHover = (position) => board.current.focus() || setPositionUnderMouse(position);
   const onKeyDown = ({key}) => KEY_ROTATIONS[key] && onRotate(KEY_ROTATIONS[key]);
+  const onHover = (position) => {
+    const x = window.scrollX;
+    const y = window.scrollY;
+    board.current.focus();
+    window.scrollTo(x, y);
+    
+    setPositionUnderMouse(position);
+  };
   
   const onClickTile = () => {
     if (onTileClick || getValueToInclude) {

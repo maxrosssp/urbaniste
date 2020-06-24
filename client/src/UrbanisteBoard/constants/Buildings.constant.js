@@ -33,9 +33,10 @@ export default {
   [Building.LIGHTHOUSE]: {
     name: Building.LIGHTHOUSE,
     label: 'Lighthouse',
+    shortLabel: 'Light H.',
     class: 'lighthouse',
     type: ProjectTypes[ProjectType.AQUATIC],
-    description: 'Must be build adjacent to a body of water. You can place markers within 2 hexes of this structure as if they were adjacent.'
+    description: 'Must be built adjacent to a body of water. You can place markers within 2 hexes of this structure as if they were adjacent.'
   },
   [Building.LOCK]: {
     name: Building.LOCK,
@@ -47,6 +48,7 @@ export default {
   [Building.BOULEVARD]: {
     name: Building.BOULEVARD,
     label: 'Boulevard',
+    shortLabel: 'Blvd.',
     class: 'boulevard',
     type: ProjectTypes[ProjectType.INFRASTRUCTURE],
     description: ''
@@ -82,6 +84,7 @@ export default {
   [Building.TENEMENT]: {
     name: Building.TENEMENT,
     label: 'Tenement',
+    shortLabel: 'Tnmt.',
     class: 'tenement',
     type: ProjectTypes[ProjectType.COMMERCIAL],
     description: 'Costs one less for each tenement structure you already control.'
@@ -96,6 +99,7 @@ export default {
   [Building.REFINERY]: {
     name: Building.REFINERY,
     label: 'Refinery',
+    shortLabel: 'Rfny.',
     class: 'refinery',
     type: ProjectTypes[ProjectType.COMMERCIAL],
     description: 'Costs 3 of the same resource. For each tile that this structure is build over, gain a resource of that type.'
@@ -110,6 +114,7 @@ export default {
   [Building.WATCHTOWER]: {
     name: Building.WATCHTOWER,
     label: 'Watchtower',
+    shortLabel: 'W. Tower',
     class: 'watchtower',
     type: ProjectTypes[ProjectType.COMMERCIAL],
     description: 'Enemies may not build structures or place markers adjacent to this structure.'
@@ -117,6 +122,7 @@ export default {
   [Building.LOAN_OFFICE]: {
     name: Building.LOAN_OFFICE,
     label: 'Loan Office',
+    shortLabel: 'Loan O.',
     class: 'loan-office',
     type: ProjectTypes[ProjectType.COMMERCIAL],
     description: 'Gain three resources of the same type.'
@@ -124,6 +130,7 @@ export default {
   [Building.TAXHOUSE]: {
     name: Building.TAXHOUSE,
     label: 'Taxhouse',
+    shortLabel: 'Tax H.',
     class: 'taxhouse',
     type: ProjectTypes[ProjectType.CIVIC],
     description: ''
@@ -131,6 +138,7 @@ export default {
   [Building.CEMETARY]: {
     name: Building.CEMETARY,
     label: 'Cemetary',
+    shortLabel: 'Cmty.',
     class: 'cemetary',
     type: ProjectTypes[ProjectType.CIVIC],
     description: ''
@@ -138,6 +146,7 @@ export default {
   [Building.SHIPYARD]: {
     name: Building.SHIPYARD,
     label: 'Shipyard',
+    shortLabel: 'S. Yard',
     class: 'shipyard',
     type: ProjectTypes[ProjectType.CIVIC],
     description: 'Must be build over one friend tile, one enemy tile, and one water tile.'
@@ -152,6 +161,7 @@ export default {
   [Building.MONUMENT]: {
     name: Building.MONUMENT,
     label: 'Monument',
+    shortLabel: 'Mnmt.',
     class: 'monument',
     type: ProjectTypes[ProjectType.CIVIC],
     description: 'Replace an enemy marker within two hexes of this structure with a friendly marker.'
@@ -159,6 +169,7 @@ export default {
   [Building.HOUSING_UNIT]: {
     name: Building.HOUSING_UNIT,
     label: 'Housing Unit',
+    shortLabel: 'H. Unit',
     class: 'housing-unit',
     type: ProjectTypes[ProjectType.DEFAULT],
     description: ''
@@ -166,6 +177,7 @@ export default {
   [Building.PLACE_CHARLES_DE_GAULLE]: {
     name: Building.PLACE_CHARLES_DE_GAULLE,
     label: 'Place Charles de Gaulle',
+    shortLabel: 'Place CG',
     class: 'charles-de-gaulle',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: ''
@@ -173,6 +185,7 @@ export default {
   [Building.PARC_DE_BUTTES_CHAUMONT]: {
     name: Building.PARC_DE_BUTTES_CHAUMONT,
     label: 'Parc de Buttes Chaumont',
+    shortLabel: 'Parc BC',
     class: 'buttes-chaumont',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: ''
@@ -180,6 +193,7 @@ export default {
   [Building.RUE_DE_RIVOLI]: {
     name: Building.RUE_DE_RIVOLI,
     label: 'Rue de Rivoli',
+    shortLabel: 'Rivoli',
     class: 'rue-rivoli',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: ''
@@ -187,6 +201,7 @@ export default {
   [Building.CITY_HALL]: {
     name: Building.CITY_HALL,
     label: 'City Hall',
+    shortLabel: 'C. Hall',
     class: 'city-hall',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 1 VP for each adjacent structure.'
@@ -194,6 +209,7 @@ export default {
   [Building.EMBASSY]: {
     name: Building.EMBASSY,
     label: 'Embassy',
+    shortLabel: 'Emb.',
     class: 'embassy',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 1 VP for each adjacent friendly or enemy non-embassy structure.'
@@ -201,6 +217,7 @@ export default {
   [Building.TOUR_EIFFEL]: {
     name: Building.TOUR_EIFFEL,
     label: 'Tour Eiffel',
+    shortLabel: 'Eiffel',
     class: 'tour-eiffel',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Can only be built if surrounded by structures on all sides.'
@@ -208,6 +225,7 @@ export default {
   [Building.BOIS_VINCENNES]: {
     name: Building.BOIS_VINCENNES,
     label: 'Bois de Vincennes',
+    shortLabel: 'B.Vinc',
     class: 'bois-vincennes',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 2 VPs for each adjacent unclaimed resource tile at end of game.'
@@ -215,6 +233,7 @@ export default {
   [Building.CATHEDRAL]: {
     name: Building.CATHEDRAL,
     label: 'Cathedral',
+    shortLabel: 'Cath.',
     class: 'cathedral',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Cannot be built adjacent to friendly structures. You cannot build any structures adjacent to this.'
@@ -229,6 +248,7 @@ export default {
   [Building.GUILD_HALL]: {
     name: Building.GUILD_HALL,
     label: 'Guild Hall',
+    shortLabel: 'G. Hall',
     class: 'guild-hall',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Choose a resource type. Worth 1 VP for each adjacent.'
@@ -236,6 +256,7 @@ export default {
   [Building.LE_HAVRE]: {
     name: Building.LE_HAVRE,
     label: 'Le Havre',
+    shortLabel: 'Havre',
     class: 'le-havre',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 2 VPs for each adjacent water tile.'
@@ -250,6 +271,7 @@ export default {
   [Building.MUSEE_LOUVRE]: {
     name: Building.MUSEE_LOUVRE,
     label: 'Musée du Louvre',
+    shortLabel: 'Louvre',
     class: 'musee-louvre',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 5 VPs for each structure category you don\'t build this game.'
@@ -257,6 +279,7 @@ export default {
   [Building.MUSEE_DORSAY]: {
     name: Building.MUSEE_DORSAY,
     label: 'Musée d\'Orsay',
+    shortLabel: 'M. Orsay',
     class: 'musee-dorsay',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'All adjacent resource hexes are worth double.'
@@ -264,6 +287,7 @@ export default {
   [Building.WATERWORKS]: {
     name: Building.WATERWORKS,
     label: 'Waterworks',
+    shortLabel: 'WW',
     class: 'waterworks',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Must be built adjacent to water. Worth 1 VP for each contiguous friendly structure.'
@@ -271,6 +295,7 @@ export default {
   [Building.OPERA_GARNIER]: {
     name: Building.OPERA_GARNIER,
     label: 'Opéra Garnier',
+    shortLabel: 'Opéra',
     class: 'opera-garnier',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Whenever a player collects resources from an adjacent district, that player collects an additional resource of that type.'
@@ -278,6 +303,7 @@ export default {
   [Building.GRAND_CANAL]: {
     name: Building.GRAND_CANAL,
     label: 'Grand Canal',
+    shortLabel: 'G. Canal',
     class: 'grand-canal',
     type: ProjectTypes[ProjectType.CULTURAL],
     description: 'Worth 2 VPs for each built over water hex. Must be built over at least one friendly and one water hex.'

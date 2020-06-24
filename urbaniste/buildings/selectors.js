@@ -43,4 +43,4 @@ export const getLastTramwayAdjacentTiles = (state, playerId) => getAllAdjacentTi
 
 export const getLastGuildHallAdjacentTiles = (state, playerId) => getAllAdjacentTiles(state, getLastPlayerBuildingBuiltOfType(state, playerId, Building.GUILD_HALL).positions);
 
-export const getStingRemainingOptions = (state) => getAllAdjacentTiles(state, getStingRemainingPrisons(state).map(prison => prison.positions).flat()).filter(tile => tile.owner && !tile.building).map(tile => tile.position);
+export const getStingRemainingPositionOptions = (state) => getAllAdjacentTiles(state, getStingRemainingPrisons(state).map(prison => prison.positions).flat()).filter(tile => tile.owner && !tile.building).map(tile => tile.position);

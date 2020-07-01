@@ -15,6 +15,14 @@ export const projectsByType = {
   [ProjectType.INFRASTRUCTURE]: infrastructure
 };
 
-export const projects = Object.values(projectsByType).reduce((projects, projectType) => ({ ...projects, ...projectType }), {});
+export const projects = Object.values(projectsByType).reduce((projects, projectsOfType) => {
+  return {
+    ...projects,
+    ...projectsOfType.reduce((projectConfigs, config) => ({
+      ...projectConfigs,
+      [config.name]: config
+    }), {})
+  };
+}, {});
 
 export const getProjectConfig = (name) => projects[name];

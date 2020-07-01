@@ -21,7 +21,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist', 'client')));
 
 https.createServer(certificate, app).listen(PORT, function () {
-  console.log('Example app listening on port 3000! Go to https://localhost/')
+  console.log('Example app listening on port ' + PORT + '! Go to https://localhost/');
 });
 
 const server = Server({

@@ -2,7 +2,8 @@ import {
   Shape,
   Resource,
   Building,
-  Stage
+  Stage,
+  ProjectType
 } from '../../constants.js';
 import {
   getPlayerBuildingsOfType,
@@ -10,7 +11,7 @@ import {
   getAllAdjacentTiles
 } from '../../utils';
 
-export default {
+const projects = {
   [Building.TENEMENT]: {
     shape: Shape.TRIANGLE_3,
     claims: { friendly: 3 },
@@ -65,3 +66,5 @@ export default {
     }
   }
 };
+
+export default Object.keys(projects).map(name => ({ name, type: ProjectType.COMMERCIAL, ...projects[name] }));

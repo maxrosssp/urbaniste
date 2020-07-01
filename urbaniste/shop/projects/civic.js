@@ -2,10 +2,11 @@ import {
   Shape,
   Resource,
   Building,
-  Stage
+  Stage,
+  ProjectType
 } from '../../constants.js';
 
-export default {
+const projects = {
   [Building.TAXHOUSE]: {
     shape: Shape.TRIANGLE_3,
     claims: { friendly: 1, enemy: 2 },
@@ -45,3 +46,5 @@ export default {
     victoryPoints: 2
   }
 };
+
+export default Object.keys(projects).map(name => ({ name, type: ProjectType.CIVIC, ...projects[name] }));

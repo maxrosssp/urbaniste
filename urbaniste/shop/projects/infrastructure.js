@@ -2,13 +2,14 @@ import {
   Shape,
   Resource,
   Building,
-  Stage
+  Stage,
+  ProjectType
 } from '../../constants.js';
 import {
   getAllAdjacentBuildings
 } from '../../utils';
 
-export default {
+const projects = {
   [Building.BOULEVARD]: {
     shape: Shape.LINE_3,
     claims: [{ friendly: 1, unclaimed: 2, water: 0 }, { friendly: 2, unclaimed: 1, water: 0 }],
@@ -53,3 +54,5 @@ export default {
     getNextStage: () => Stage.TRAM
   }
 };
+
+export default Object.keys(projects).map(name => ({ name, type: ProjectType.INFRASTRUCTURE, ...projects[name] }));

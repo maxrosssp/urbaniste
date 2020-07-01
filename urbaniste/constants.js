@@ -124,16 +124,14 @@ const Directions = [
   { row: -1, col: 1 }
 ];
 
-const DefaultShopProjectTypes = [
-  ProjectType.INFRASTRUCTURE,
-  ProjectType.AQUATIC,
-  ProjectType.COMMERCIAL,
-  ProjectType.CIVIC,
-  ProjectType.DEFAULT,
-  ProjectType.CULTURAL,
-  ProjectType.CULTURAL,
-  ProjectType.CULTURAL,
-];
+const ShopProjectTypeCount = {
+  [ProjectType.INFRASTRUCTURE]: 1,
+  [ProjectType.AQUATIC]: 1,
+  [ProjectType.COMMERCIAL]: 1,
+  [ProjectType.CIVIC]: 1,
+  [ProjectType.DEFAULT]: 1,
+  [ProjectType.CULTURAL]: 3
+};
 
 const ShapePositions = {
   [Shape.SINGLE]: [
@@ -262,7 +260,7 @@ export {
   TileGroupSize,
   TileGroups,
   Directions,
-  DefaultShopProjectTypes,
+  ShopProjectTypeCount,
   ShapePositions,
   Stage,
   Move

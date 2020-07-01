@@ -2,7 +2,8 @@ import {
   Shape,
   Resource,
   Building,
-  Stage
+  Stage,
+  ProjectType
 } from '../../constants.js';
 import {
   getAllAdjacentTiles
@@ -11,7 +12,7 @@ import {
   validateFriendlyAdjacent
 } from '../validation';
 
-export default {
+const projects = {
   [Building.BRIDGE]: {
     shape: Shape.LINE_3,
     claims: { friendly: 1, unclaimed: 1, water: 1 },
@@ -67,3 +68,5 @@ export default {
     victoryPoints: 2
   }
 };
+
+export default Object.keys(projects).map(name => ({ name, type: ProjectType.AQUATIC, ...projects[name] }));

@@ -75,19 +75,6 @@ const Stages = {
       'Select a structure to build, or end your turn. (Projects you are able to build are highlighted in yellow.)',
     buttons: ['undoExpand', 'endTurn'],
     getPossibleMoves: (state, playerId) => {
-      // const possibleProjects = getProjects(state, playerId).filter(({ canBuild }) => canBuild);
-      // const emptyTiles = getTiles(state).filter(({ owner }) => !owner);
-      // emptyTiles.reduce((possibleMoves, currentTile) => {
-      //   const possibleMovesAtTile = possibleProjects.reduce((validMovesAtTile, project) => {
-      //     const numberOfRotations = ShapePositions[project.shape].length;
-      //     const validProjectMovesAtTile = [...Array(numberOfRotations).keys()]
-      //       .map(rotation => getPositionsForShapeAtPosition(currentTile.position, rotation, project.name))
-      //       .filter(positions => canBuildInPositions(state, playerId, positions, project.name))
-      //       .map(positions => ({ move: Move.BUILD_PROJECT, args: [project.name, positions, getValueToInclude(state, playerId, project.name, positions)] }))
-      //     return validMovesAtTile.concat(validProjectMovesAtTile);
-      //   }, []);
-      //   return possibleMoves.concat(possibleMovesAtTile);
-      // }, []);
       const possibleProjects = getProjects(state, playerId).filter(({ canBuild }) => canBuild);
       return getTiles(state).filter(({ owner }) => !owner).reduce((possibleMoves, currentTile) => possibleMoves.concat(possibleProjects.reduce((validMovesAtTile, project) => validMovesAtTile.concat([...Array(ShapePositions[project.shape].length).keys()]
           .map(rotation => getPositionsForShapeAtPosition(currentTile.position, rotation, project.name))
@@ -155,14 +142,6 @@ const Stages = {
       const validFromPositions = tramwayAdjacentTiles.filter(tile => tile.owner && !tile.building).map(tile => tile.position);
       const validToPositions = tramwayAdjacentTiles.filter(tile => !tile.owner && tile.resource !== Resource.WATER).map(tile => tile.position);
       return validFromPositions.reduce((validTramMoves, fromPosition) => {
-        // const validMovesFromPosition = [];
-        // validToPositions.forEach(toPosition => {
-        //   if (!positionsAreEqual(fromPosition, toPosition)) {
-        //     validMovesFromPosition.push({ move: Move.TRAM, args: [fromPosition, toPosition] })
-        //   }
-        // });
-        // return validTramMoves.concat(validMovesFromPosition);
-
         return validTramMoves.concat(validToPositions.filter(toPosition => !positionsAreEqual(fromPosition, toPosition)).map(toPosition => ({ move: Move.TRAM, args: [fromPosition, toPosition] })));
       }, []).concat({ move: Move.END_TURN });
     }

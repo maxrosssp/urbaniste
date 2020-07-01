@@ -2,7 +2,8 @@ import {
   Shape,
   Resource,
   Building,
-  Stage
+  Stage,
+  ProjectType
 } from '../../constants.js';
 import {
   getTiles,
@@ -18,7 +19,7 @@ import {
   getContiguousFriendlyBuildings
 } from '../../buildings/validation';
 
-export default {
+const projects = {
   [Building.PLACE_CHARLES_DE_GAULLE]: {
     shape: Shape.STAR,
     claims: { friendly: 7 },
@@ -174,3 +175,5 @@ export default {
     victoryPoints: (state, positions) => getTiles(state, positions).filter(tile => tile.resource === Resource.WATER).length * 2
   }
 };
+
+export default Object.keys(projects).map(name => ({ name, type: ProjectType.CULTURAL, ...projects[name] }));

@@ -1,6 +1,14 @@
+@import '../../../../style/colors.scss';
+
 .project-shape {
   svg {
     g {
+      .hexagon-group.water {
+        g {
+          fill: $water
+        }
+      }
+
       fill: hsl(0, 0%, 91%);
 
       .hexagon:hover,
@@ -29,5 +37,17 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+  }
+
+  svg.player-marker {
+    overflow: visible;
+  }
+
+  .player-marker.mine circle {
+    fill: $first-player-main;
+  }
+
+  .player-marker.enemy circle {
+    fill: $second-player-main;
   }
 }

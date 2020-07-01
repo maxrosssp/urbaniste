@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Redirect, useParams } from "react-router-dom";
 import classNames from 'classnames';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Players from './components/Players';
@@ -6,11 +7,13 @@ import Shop from './components/Shop';
 import Board from './components/Board';
 import ResourcesModal from './components/ResourcesModal';
 import ResourceSelectModal from './components/ResourceSelectModal';
+import GameOverModal from './components/GameOverModal';
 import { Stage, Move } from '../../../../urbaniste/constants';
 import { getStage } from '../../../../urbaniste/stages';
 import { getProjects } from '../../../../urbaniste/shop/selectors';
 import { getTiles } from '../../../../urbaniste/tiles/selectors';
 import { canPlayerExpand } from '../../../../urbaniste/tiles/validation';
+import { playAgain } from '../services/lobby';
 
 function UrbanisteBoard({
   G,
@@ -28,6 +31,7 @@ function UrbanisteBoard({
     buttons,
     displayMessage
   } = getStage(ctx.activePlayers !== null && ctx.activePlayers[playerID]) || {};
+  const { gameID, credentials } = useParams();
   const isTurn = ctx.currentPlayer === playerID;
 
   const [projects, setProjects] = useState([]);
@@ -36,6 +40,16 @@ function UrbanisteBoard({
   const [rotation, setRotation] = useState(0);
   const [selectedProjectName, setSelectedProjectName] = useState(null);
   const [boardState, setBoardState] = useState({ positionsToBuild: [], valid: false, canAct: false });
+  const [playAgainNextRoomId, setPlayAgainNextRoomId] = useState(undefined);
+  const [leaveRoom, setLeaveRoom] = useState(false);
+
+  const onLeaveRoom = () => setLeaveRoom(true);
+
+  const onPlayAgain = () => {
+    playAgain(gameID, playerID, credentials).then(response => {
+      setPlayAgainNextRoomId(response.data.nextRoomID);
+    });
+  };
 
   useEffect(() => {
     const boardState = getBoardState ? getBoardState(G, playerID, positionUnderMouse, rotation, selectedProjectName)
@@ -61,6 +75,14 @@ function UrbanisteBoard({
 
   if (!playerID) {
     return <></>;
+  }
+
+  if (leaveRoom) {
+    return <Redirect to="/" />;
+  }
+
+  if (playAgainNextRoomId) {
+    return <Redirect to={`/game/${playAgainNextRoomId}/${playerID}/${credentials}`} />;
   }
 
   return (
@@ -131,6 +153,14 @@ function UrbanisteBoard({
         <ResourceSelectModal
           moves={moves}
           { ...getResourceSelectModal() }
+        />
+      )}
+
+      {ctx.gameover && (
+        <GameOverModal
+          isWinner={ctx.gameover.winners.indexOf(playerID) !== -1}
+          isTieGame={ctx.gameover.winners.length !== 1}
+          onLeaveRoom={onLeaveRoom}
         />
       )}
     </Container>

@@ -220,6 +220,16 @@ export const Urbaniste = {
 
       return { winners };
     }
+
+    if (playersWithMovesLeft.length === 1) {
+      const remainingPlayer = playersWithMovesLeft[0];
+      const remainingPlayerVictoryPoints = getPlayerVictoryPoints(G, remainingPlayer);
+      const isRemainingPlayerWinning = ctx.playOrder.filter(playerId => playerId !== remainingPlayer)
+        .every(playerId => getPlayerVictoryPoints(G, playerId) < remainingPlayerVictoryPoints);
+      if (isRemainingPlayerWinning) {
+        return { winners: [remainingPlayer] };
+      }
+    }
   },
   minPlayers: 1,
   maxPlayers: 2,

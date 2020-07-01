@@ -48,3 +48,7 @@ export function createRoom(playerName, roomName, shopConfig = {}, boardConfig = 
 export function leaveRoom(gameID, playerID, credentials) {
   return axios.post(`${URBANISTE_LOBBY}/${gameID}/leave`, { playerID, credentials });
 }
+
+export function playAgain(gameID, playerID, credentials) {
+  return axios.post(`${URBANISTE_LOBBY}/${gameID}/playAgain`, { playerID, credentials });
+}

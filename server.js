@@ -7,9 +7,12 @@ const { Server } = require('boardgame.io/server');
 const { Urbaniste } = require('./urbaniste');
 
 const certificate = {
-  cert: fs.readFileSync('./cert/csr.pem'),
+  cert: fs.existsSync('./cert/csr.pem') ? fs.readFileSync('./cert/csr.pem') : fs.readFileSync('./.cert/csr.pem'),
   key: [
-    { pem: fs.readFileSync('./cert/privatekey.pem'), passphrase: 'urbaniste' }
+    { 
+      pem: fs.existsSync('./cert/privatekey.pem') ? fs.readFileSync('./cert/privatekey.pem') : fs.readFileSync('./.cert/privatekey.pem'),
+      passphrase: 'urbaniste' 
+    }
   ]
 };
 
